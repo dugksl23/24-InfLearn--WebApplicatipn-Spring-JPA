@@ -1,0 +1,48 @@
+#spring:
+#  datasource:
+#    url: jdbc:h2:tcp://localhost/~/jpashop
+#    username: sa
+#    password:
+#    driver-class-name: org.h2.Driver
+#
+#  jpa:
+#    hibernate:
+#      ddl-auto: create
+#      #ddl-auto는 build 시에 자동으로 table을 생성
+#      properties:
+#        hibernate:
+#          #show_sql: true          #show_sql은 system.out.println으로 찍는거고
+#          format_sql: true
+#          highlight_sql: true # SQL 출력을 ANSI escape codes를 사용하여 색을 부여합니다.
+#          use_sql_comments: true
+#          default_batch_fetch_size: 1000 #최적화 옵션
+#
+#logging.level:
+#  org.hibernate.SQL: debug
+##  org.hibernate.type: trace
+##debug 모드면 hibernate가 만든 모든 로거를 통해 로그를 찍는 것이기에, 운영환경은 모두다 debug
+
+
+
+spring:
+  datasource:
+    url: jdbc:h2:tcp://localhost/~/jpashop
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+        default_batch_fetch_size: 1000 #최적화 옵션
+        highlight_sql: true # SQL 출력을 ANSI escape codes를 사용하여 색을 부여합니다.
+        use_sql_comments: true
+
+logging.level:
+  org.hibernate.SQL: debug
+  org.hibernate.type: trace
+  #콘솔 로그에 파라미터가 매핑된 실행 파라미터를 로그에 남긴다.
