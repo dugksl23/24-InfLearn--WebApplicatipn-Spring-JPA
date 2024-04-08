@@ -2,7 +2,6 @@ package JPA.Book.jpashop.Entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
-import lombok.Singular;
 
 @Entity
 @Getter
@@ -18,7 +17,7 @@ public abstract class Item {
     private String name;
     private int price;
     private int stockQuantity;
-    private Category category;
+   // private Category category;
 
 
 

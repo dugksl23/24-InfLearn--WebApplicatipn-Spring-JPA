@@ -32,7 +32,7 @@ public class Order {
                                     // @JoinColumn 관계의 주인을 지정하는 컬럼이다.
     // 더불어 FetchType.EAGER인 이유는 해당 오더의 주인이 누군지 명확히 알아야하기에, 첫 쿼리부터
     // Member_id를 조인할 수밖에 없다. 그렇다면 해당 데이터를 처음부터 불러오는 것이 성능적으로 유리하다.
-    private Member members;
+    private Member member;
 
     @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
     private List<OrderItem> orderItems;

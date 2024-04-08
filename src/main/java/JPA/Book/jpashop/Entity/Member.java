@@ -19,7 +19,7 @@ public class Member {
     @Embedded //임베디드 타입, 내장 타입(종속변수)로 활용하는 Entity에서 @Embedded 어노테이션을 활용하면,
               // 해당 class에서는 @Embeddable 을 하지 않아도 되지만, 일반적으로 둘다 활용.
     private Address address;
-    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+
     //DB입장에서는 Order_id를 외부키로 매핑한다.
     //더불어, 멤버의 데이터를 변경할 때는 멤버만 조회한다.
     // 따라서 Orders의 데이터는 필요한 시기 때 불러오게 하면 된다.
@@ -30,7 +30,9 @@ public class Member {
     // 연관관계의 주인이 아닐 경우 mappedBy 사용
     // orders 테이블에 있는 member 필드에 의해 연관관계 매핑
     //여기서 값을 설정해도 fk 값이 변경되지 않음
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
     private List<Order> orders;
+
 
 
 
