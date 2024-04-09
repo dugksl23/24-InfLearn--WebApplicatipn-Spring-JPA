@@ -1,5 +1,6 @@
-package JPA.Book.jpashop.Entity;
+package JPA.Book.jpashop.item.domain;
 
+import JPA.Book.jpashop.category.domain.Category;
 import jakarta.persistence.*;
 import lombok.Getter;
 

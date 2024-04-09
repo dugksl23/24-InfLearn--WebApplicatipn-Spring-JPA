@@ -1,5 +1,7 @@
-package JPA.Book.jpashop.Entity;
+package JPA.Book.jpashop.orderItem.domain;
 
+import JPA.Book.jpashop.item.domain.Item;
+import JPA.Book.jpashop.order.domain.Order;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

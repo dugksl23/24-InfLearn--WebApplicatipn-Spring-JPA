@@ -1,7 +1,10 @@
-package JPA.Book.jpashop.Entity;
+package JPA.Book.jpashop.order.domain;
 
 
-import JPA.Book.jpashop.domain.OrderStatus;
+import JPA.Book.jpashop.Member.domain.Member;
+import JPA.Book.jpashop.delivery.domain.Delivery;
+import JPA.Book.jpashop.item.domain.subItems.OrderStatus;
+import JPA.Book.jpashop.orderItem.domain.OrderItem;
 import jakarta.persistence.*;
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;

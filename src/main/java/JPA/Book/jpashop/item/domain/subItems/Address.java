@@ -1,4 +1,4 @@
-package JPA.Book.jpashop.domain;
+package JPA.Book.jpashop.item.domain.subItems;
 
 import jakarta.persistence.Embeddable;
 import lombok.Getter;
