@@ -4,6 +4,7 @@ import JPA.Book.jpashop.domain.Address;
 import jakarta.persistence.*;
 import lombok.Getter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -31,9 +32,7 @@ public class Member {
     // orders 테이블에 있는 member 필드에 의해 연관관계 매핑
     //여기서 값을 설정해도 fk 값이 변경되지 않음
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
-    private List<Order> orders;
-
-
+    private List<Order> orders = new ArrayList<>();
 
 
     //1. db에서는 기본키와 외래키로 나눈다. 관계의 주인(보통 다의 관계에 해당하는 Entity)이 해당 테이블에 기본키와 외래키를 갖는다. 즉 연관관계의 주인이 된다.

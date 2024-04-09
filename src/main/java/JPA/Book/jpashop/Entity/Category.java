@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -37,6 +38,13 @@ public class Category {
     private Category parent;
 
     @OneToMany(mappedBy = "parent")
-    private List<Category> children;
+    private List<Category> child = new ArrayList<>();
+
+
+    // == 연관관계 편의 메서드 ==
+    public void addChildCategory(Category child) {
+        this.child.add(child);
+        child.setParent(this);
+    }
 
 }

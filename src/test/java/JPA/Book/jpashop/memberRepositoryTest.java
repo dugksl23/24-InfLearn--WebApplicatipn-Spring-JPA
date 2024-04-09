@@ -1,5 +1,6 @@
 //package JPA.Book.jpashop;
 //
+//import JPA.Book.jpashop.Entity.Member;
 //import org.assertj.core.api.Assertions;
 //import org.junit.jupiter.api.Test;
 //import org.junit.runner.RunWith;
@@ -24,7 +25,6 @@
 //        //given
 //        Member member = new Member();
 //        member.setUserName("dugksl23");
-//
 //        //when
 //        long saveId = memberRepository.save(member);
 //        Member byId = memberRepository.findById(saveId);
