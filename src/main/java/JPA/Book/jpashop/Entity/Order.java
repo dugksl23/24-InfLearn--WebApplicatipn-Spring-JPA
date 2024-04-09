@@ -27,11 +27,9 @@ public class Order {
     private OrderStatus orderStatus;
 
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id") // 객체 세상에서는 다의 관계에 있는 Entity가 연관관계의 주인.
                                     // @JoinColumn 관계의 주인을 지정하는 컬럼이다.
-    // 더불어 FetchType.EAGER인 이유는 해당 오더의 주인이 누군지 명확히 알아야하기에, 첫 쿼리부터
-    // Member_id를 조인할 수밖에 없다. 그렇다면 해당 데이터를 처음부터 불러오는 것이 성능적으로 유리하다.
     private Member member;
 
     @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)

@@ -16,7 +16,4 @@ public class Book extends Item {
     private String title;
     private String isbn;
 
-
-
-
 }
