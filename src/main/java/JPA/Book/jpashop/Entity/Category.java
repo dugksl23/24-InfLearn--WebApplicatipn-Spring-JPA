@@ -32,7 +32,7 @@ public class Category {
     //일대다 다대일로 풀어내는 중간 테이블이 필요하다.
     //-> 다만, 활용방법은 이게 다이며, 중간에 테이블에 무엇을 추가할 수도 없다. 현업에서는 사용 불가.
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id")
     private Category parent;
 
