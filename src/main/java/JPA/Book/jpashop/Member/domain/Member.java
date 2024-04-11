@@ -3,13 +3,19 @@ package JPA.Book.jpashop.Member.domain;
 import JPA.Book.jpashop.item.domain.subItems.Address;
 import JPA.Book.jpashop.order.domain.Order;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Getter
+@RequiredArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Member {
 
 
@@ -38,8 +44,6 @@ public class Member {
 
     //1. db에서는 기본키와 외래키로 나눈다. 관계의 주인(보통 다의 관계에 해당하는 Entity)이 해당 테이블에 기본키와 외래키를 갖는다. 즉 연관관계의 주인이 된다.
     //2. 객체 세상에서는 외래키로 매핑된 다의 입장을 연관관계의 주인으로 본다.
-
-
 
 
 }

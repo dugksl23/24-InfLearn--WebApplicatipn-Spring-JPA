@@ -19,6 +19,7 @@ public class MemberRepository {
 
     public void saveMember(Member member) {
         em.persist(member);
+
         //EntityManager에 의해 영속성 컨텍스트에 persist(영속화)가 된다.
         //이후 db와의 transaction 과정에서 db에 보존 저장된다.
     }

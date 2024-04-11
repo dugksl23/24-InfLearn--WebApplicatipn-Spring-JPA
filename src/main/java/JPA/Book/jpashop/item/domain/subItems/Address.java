@@ -16,11 +16,12 @@ public class Address {
     protected Address() {
     }
 
-    protected Address(String street, String city, String zipCode) {
+    public Address(String street, String city, String zipCode) {
         this.street = street;
         this.city = city;
         this.zipCode = zipCode;
     }
     //임베디드 값 타입은 최초 입력 이후 변경되면 안된다(Immutable)
     //최초 입력 시 값을 입력하도록 기본 생성자를 통해서
+
 }
