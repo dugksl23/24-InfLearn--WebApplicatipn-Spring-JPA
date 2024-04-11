@@ -63,7 +63,7 @@ class MemberServiceTest {
             memberService.validateDuplicateMember(yohan);
         } catch(IllegalStateException e){
             e.printStackTrace();
-            System.out.println("error msg :" + e.getStackTrace());
+            //System.out.println("error msg :" + e.getStackTrace());
             return;
         }
         //then
