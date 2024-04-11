@@ -17,13 +17,14 @@ public class OrderRepository {
 
     private final EntityManager em;
 
-    public void saveOrder(Order order) {
+    public Long saveOrder(Order order) {
         em.persist(order);
+        return order.getId();
     }
 
-    public long findOrderById(Long id) {
+    public Order findOrderById(Long id) {
         Order order = em.find(Order.class, id);
-        return order.getId();
+        return order;
     }
 
     public List<Order> findAllOrders() {

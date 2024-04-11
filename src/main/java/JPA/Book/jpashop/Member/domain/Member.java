@@ -10,8 +10,8 @@ import java.util.List;
 
 @Entity
 @Getter
-@RequiredArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
 public class Member {
 

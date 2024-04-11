@@ -5,12 +5,13 @@ import JPA.Book.jpashop.item.subItems.Address;
 import JPA.Book.jpashop.item.subItems.DeliveryStatus;
 import JPA.Book.jpashop.order.domain.Order;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Getter
-@Setter
+@Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class Delivery {
 
 
@@ -29,6 +30,7 @@ public class Delivery {
 
     @OneToOne(mappedBy = "delivery", cascade = CascadeType.ALL)
     // mappedby : 매핑되어있는 테이블의 속성을 명시. 조인을 위한 값이 아님.
+    @Setter
     private Order order;
 
 

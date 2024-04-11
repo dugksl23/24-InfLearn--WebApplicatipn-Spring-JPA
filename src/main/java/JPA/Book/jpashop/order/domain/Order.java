@@ -7,21 +7,19 @@ import JPA.Book.jpashop.item.subItems.DeliveryStatus;
 import JPA.Book.jpashop.item.subItems.OrderStatus;
 import JPA.Book.jpashop.orderItem.domain.OrderItem;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Entity
 @Getter
 @Table(name = "orders")
 @Builder
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class Order {
 
@@ -82,7 +80,7 @@ public class Order {
 
 
     // == 생성 메서드 ==
-    public static Order createOrder(Member member, Delivery delivery, List<OrderItem> orderItems) {
+    public static Order createOrder(Member member, Delivery delivery, OrderItem... orderItems) {
         /*
          *  OrderItem... orderItems는 OrderItem 타입의 가변인자를 나타냅니다.
          *  이 메소드를 호출할 때는 다음과 같이 여러 개의 OrderItem 인스턴스를 전달할 수 있습니다.
@@ -92,7 +90,9 @@ public class Order {
                 .delivery(delivery)
                 .orderStatus(OrderStatus.ORDER)
                 .build();
-        orderItems.stream().forEach(orderItem -> order.addOrderItem(orderItem));
+        //orderItems.stream().forEach(orderItem -> order.addOrderItem(orderItem));
+        Arrays.stream(orderItems).forEach(orderItem -> order.addOrderItem(orderItem));
+
         return order;
 
     }
@@ -101,11 +101,12 @@ public class Order {
     /*
      * === 주문 취소 비지니스 로직 ===
      * */
-    public void cancelOrder(Member member, Delivery delivery, OrderStatus orderStatus) {
+    public void cancelOrder(Member member, Delivery delivery) {
 
         if (delivery.getStatus().equals(DeliveryStatus.COMP)) throw new IllegalStateException("이미 배송 중인 취소가 불가합니다.");
         else this.orderStatus = OrderStatus.CANCEL;
         orderItems.stream().forEach(orderItem -> orderItem.cancel()); //수량 원복
+        // cancel()로 인해서 변경 감지가 일어나서 자동으로 jpa가 변경사항을 추적 및 반영한다.
 
     }
 
