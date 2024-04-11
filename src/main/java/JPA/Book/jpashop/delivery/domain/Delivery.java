@@ -1,8 +1,8 @@
 package JPA.Book.jpashop.delivery.domain;
 
 
-import JPA.Book.jpashop.item.domain.subItems.Address;
-import JPA.Book.jpashop.item.domain.subItems.DeliveryStatus;
+import JPA.Book.jpashop.item.subItems.Address;
+import JPA.Book.jpashop.item.subItems.DeliveryStatus;
 import JPA.Book.jpashop.order.domain.Order;
 import jakarta.persistence.*;
 import lombok.Getter;

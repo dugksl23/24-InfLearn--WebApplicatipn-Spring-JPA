@@ -1,4 +1,4 @@
-package JPA.Book.jpashop.item.domain.repository;
+package JPA.Book.jpashop.item.repository;
 
 
 import JPA.Book.jpashop.item.domain.Item;

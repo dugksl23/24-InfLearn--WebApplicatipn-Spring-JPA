@@ -3,10 +3,14 @@ package JPA.Book.jpashop.order.domain;
 
 import JPA.Book.jpashop.Member.domain.Member;
 import JPA.Book.jpashop.delivery.domain.Delivery;
-import JPA.Book.jpashop.item.domain.subItems.OrderStatus;
+import JPA.Book.jpashop.item.subItems.DeliveryStatus;
+import JPA.Book.jpashop.item.subItems.OrderStatus;
 import JPA.Book.jpashop.orderItem.domain.OrderItem;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
@@ -15,40 +19,45 @@ import java.util.List;
 
 @Entity
 @Getter
-@Table(name="orders")
+@Table(name = "orders")
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Order {
 
-    @Id @GeneratedValue
-    @Column(name="orders_id")
+    @Id
+    @GeneratedValue
+    @Column(name = "orders_id")
     private Long id;
-    @Column(name="orders_date", updatable = false )
+    @Column(name = "orders_date", updatable = false)
     private LocalDateTime orderDate;
-    @Column(name="orders_update")
+    @Column(name = "orders_update")
     @CreatedDate //Java Spring에서 제공하는 라이브러리
     private LocalDateTime orderUpdate;
-    @Column(name="orders_status")
+    @Column(name = "orders_status")
     @Enumerated(EnumType.STRING)
+
     private OrderStatus orderStatus;
 
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id") // 객체 세상에서는 다의 관계에 있는 Entity가 연관관계의 주인.
-                                    // @JoinColumn 관계의 주인을 지정하는 컬럼이다.
+    // @JoinColumn 관계의 주인을 지정하는 컬럼이다.
     private Member member;
 
     @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<OrderItem> orderItems = new ArrayList<>( );
+    private List<OrderItem> orderItems = new ArrayList<>();
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="delivery_id")
+    @JoinColumn(name = "delivery_id")
     //하나의 주문은 하나의 배송정보를 갖기에 둘다 1:1 관계이다.
     //이때는 조회를 많이 하는 곳에서 관계의 주인을 둔다.
     private Delivery delivery;
 
     // == Member와 Order 연관 관계 메서드 ==
     public void setMember(Member member) {
-       this.member = member;
-       member.getOrders().add(this); //연관관계의 주인이기에 update 가능
+        this.member = member;
+        member.getOrders().add(this); //연관관계의 주인이기에 update 가능
     }
 
     // service area에서 별도 비지니스 로직을 구현했을 경우 ==
@@ -58,6 +67,7 @@ public class Order {
 //
 //        member.getOrders().add(order);
 //    }
+
 
     public void addOrderItem(OrderItem orderItem) {
         //한개만 주문했을 때의 비지니스 로직
@@ -70,6 +80,41 @@ public class Order {
         delivery.setOrder(this);
     }
 
-    //양방향일 경우, 자주 조회되는 곳에서 편의 메소드를 작성하면 좋다.
+
+    // == 생성 메서드 ==
+    public static Order createOrder(Member member, Delivery delivery, List<OrderItem> orderItems) {
+        /*
+         *  OrderItem... orderItems는 OrderItem 타입의 가변인자를 나타냅니다.
+         *  이 메소드를 호출할 때는 다음과 같이 여러 개의 OrderItem 인스턴스를 전달할 수 있습니다.
+         * */
+        Order order = Order.builder()
+                .member(member)
+                .delivery(delivery)
+                .orderStatus(OrderStatus.ORDER)
+                .build();
+        orderItems.stream().forEach(orderItem -> order.addOrderItem(orderItem));
+        return order;
+
+    }
+
+
+    /*
+     * === 주문 취소 비지니스 로직 ===
+     * */
+    public void cancelOrder(Member member, Delivery delivery, OrderStatus orderStatus) {
+
+        if (delivery.getStatus().equals(DeliveryStatus.COMP)) throw new IllegalStateException("이미 배송 중인 취소가 불가합니다.");
+        else this.orderStatus = OrderStatus.CANCEL;
+        orderItems.stream().forEach(orderItem -> orderItem.cancel()); //수량 원복
+
+    }
+
+    /* === 전체 주문 가격 조회 === */
+    public int getTotalPrice(){
+        return orderItems.stream().mapToInt(OrderItem::getTotalPrice).sum();
+    }
+
+
+
 }
 

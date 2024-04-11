@@ -3,7 +3,7 @@ package JPA.Book.jpashop.Member.services;
 import JPA.Book.jpashop.Member.domain.Member;
 import JPA.Book.jpashop.Member.dto.MemberDto;
 import JPA.Book.jpashop.Member.repository.MemberRepository;
-import JPA.Book.jpashop.item.domain.subItems.Address;
+import JPA.Book.jpashop.item.subItems.Address;
 import jakarta.persistence.EntityManager;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
