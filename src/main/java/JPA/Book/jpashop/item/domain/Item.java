@@ -3,19 +3,13 @@ package JPA.Book.jpashop.item.domain;
 import JPA.Book.jpashop.category.domain.Category;
 import JPA.Book.jpashop.exception.NotEnoughStockQuantityException;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Getter
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 @Inheritance //default는 Single_Table : 하나의 테이블에 모두 넣기.
 @DiscriminatorColumn(name = "dtype") //db에 서브타입을 구분하기 위해 사용되는 컬럼이며, 부모에게 사용.
 public abstract class Item {
