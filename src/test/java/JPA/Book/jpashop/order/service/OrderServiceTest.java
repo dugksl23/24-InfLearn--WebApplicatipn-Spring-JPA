@@ -2,6 +2,7 @@ package JPA.Book.jpashop.order.service;
 
 import JPA.Book.jpashop.Member.domain.Member;
 import JPA.Book.jpashop.Member.services.MemberService;
+import JPA.Book.jpashop.delivery.domain.DeliveryStatus;
 import JPA.Book.jpashop.item.adress.domain.Address;
 import JPA.Book.jpashop.item.domain.Item;
 import JPA.Book.jpashop.item.service.ItemService;
@@ -32,7 +33,6 @@ class OrderServiceTest {
     private OrderService orderService;
     @Autowired
     private MemberService memberService;
-
     @Autowired
     private ItemService itemService;
 
@@ -50,18 +50,17 @@ class OrderServiceTest {
         Long memberId = memberService.signup(member);
 
         // === 아이템 생성 ===
-        /* 1. 주문할 아이템의 Info 해당 정보는 주문과는 무관.
-         *  2. 따라서 OrderEntity의 order() 메서드에서 주문 수량을 보내준다.
+        /*  1. 주문할 아이템의 Info는 vieｗ에서 이미 request로 값을 바인딩한다.
+         *  2. 해당 item의 수량도 함께 보낸다.
+         *  3. OrderEntity의 order() 메서드에서 주문 수량을 보내준다.
          * */
 
         Book book = new Book();
+        // 1. book에 대한 info는 이미 db에 있으며, 선택된 item의 수량/가격은 ItemEntity에 담긴다.
         book.setName("시골 JPA");
         book.setPrice(10000);
         book.setStockQuantity(10);
         Long bookId = itemService.saveItem(book);
-        //book.getId();
-        //Item byId = itemService.findById(book.getId());
-
         //when
         int orderStock = 2;
         Long order = orderService.order(memberId, bookId, orderStock);
@@ -71,11 +70,10 @@ class OrderServiceTest {
         Assertions.assertThat(one.getId()).isEqualTo(order);
 
         assertEquals("상품 주문 시 주문 상태는 Order ", OrderStatus.ORDER, one.getOrderStatus());
-        //assertEquals("상품 주문 시 배송 상태는 COM ", DeliveryStatus.COMP, one.getDelivery().getStatus());
+        assertEquals("상품 주문 시 배송 상태는 COM ", DeliveryStatus.READY, one.getDelivery().getStatus());
         assertEquals("주문한 상품 종류 수가 정확해야 한다. ", 1, one.getOrderItems().size());
         assertEquals("주문 가격은 가격 * 수량이다. ", book.getPrice() * one.getOrderItems().get(0).getCount(), one.getOrderItems().get(0).getTotalPrice());
         assertEquals("주문 수량만큼 재고가 감소해야 한다. ", 8, one.getOrderItems().get(0).getItem().getStockQuantity());
-
 
     }
 
@@ -83,7 +81,7 @@ class OrderServiceTest {
     @Test
     @ExceptionHandler(NullPointerException.class)
     @DisplayName("상품 재고 수량 초과")
-    void checkQuantiy() {
+    void checkQuantity() {
         //given
         Address address = new Address("a", "b", "c");
         Member member = Member.builder().name("Yohan").address(address).build();
@@ -123,48 +121,9 @@ class OrderServiceTest {
         orderService.cancelOrder(order);
 
         //then
-        Item byId = itemService.findById(1l);
+        Item byId = itemService.findById(order);
         int stockQuantity = byId.getStockQuantity();
         Assertions.assertThat(stockQuantity).isEqualTo(10);
 
-
-    }
-
-    @Test
-    void findAll() {
-    }
-
-
-    @Transactional
-    public void orders() {
-        //given
-        // === 멤버 생성 ===
-        Address address = new Address("a", "b", "c");
-        Member member = Member.builder()
-                .name("Yohan")
-                .address(address)
-                .build();
-        Long memberId = memberService.signup(member);
-
-        // === 아이템 생성 ===
-        /* 1. 주문할 아이템의 Info 해당 정보는 주문과는 무관.
-         *  2. 따라서 OrderEntity의 order() 메서드에서 주문 수량을 보내준다.
-         * */
-
-        Book book = new Book();
-        book.setName("시골 JPA");
-        book.setPrice(10000);
-        book.setStockQuantity(10);
-        Long bookId = itemService.saveItem(book);
-        //book.getId();
-        //Item byId = itemService.findById(book.getId());
-
-        //when
-        int orderStock = 2;
-        Long order = orderService.order(memberId, bookId, orderStock);
-
-        //then
-        Order one = orderService.findOne(order);
-        System.out.println("내가 주문한 것은? : " + one);
     }
 }
