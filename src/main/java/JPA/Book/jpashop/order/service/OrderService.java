@@ -50,7 +50,7 @@ public class OrderService {
         // === 4. cascade의 범위 ===
         // 해당 필드값들을 Private owner만 embadded 값으로만 참조된다면 cascade 사용을 권장.
         // 즉 라이프사이클이 private Owner(order)에 국한된다면 사용가능.
-
+        Order orderById = orderRepository.findOrderById(orderId);
         return orderId ;
     }
 

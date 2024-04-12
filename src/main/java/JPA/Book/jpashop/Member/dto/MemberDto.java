@@ -2,7 +2,7 @@ package JPA.Book.jpashop.Member.dto;
 
 
 import JPA.Book.jpashop.Member.domain.Member;
-import JPA.Book.jpashop.item.subItems.Address;
+import JPA.Book.jpashop.item.adress.domain.Address;
 import JPA.Book.jpashop.order.domain.Order;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

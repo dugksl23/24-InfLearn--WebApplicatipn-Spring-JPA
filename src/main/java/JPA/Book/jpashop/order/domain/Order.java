@@ -3,8 +3,7 @@ package JPA.Book.jpashop.order.domain;
 
 import JPA.Book.jpashop.Member.domain.Member;
 import JPA.Book.jpashop.delivery.domain.Delivery;
-import JPA.Book.jpashop.item.subItems.DeliveryStatus;
-import JPA.Book.jpashop.item.subItems.OrderStatus;
+import JPA.Book.jpashop.delivery.domain.DeliveryStatus;
 import JPA.Book.jpashop.orderItem.domain.OrderItem;
 import jakarta.persistence.*;
 import lombok.*;
@@ -46,7 +45,7 @@ public class Order {
     @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<OrderItem> orderItems = new ArrayList<>();
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "delivery_id")
     //하나의 주문은 하나의 배송정보를 갖기에 둘다 1:1 관계이다.
     //이때는 조회를 많이 하는 곳에서 관계의 주인을 둔다.
