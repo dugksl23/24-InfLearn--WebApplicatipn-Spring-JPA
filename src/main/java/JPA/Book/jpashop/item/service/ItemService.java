@@ -31,6 +31,12 @@ public class ItemService {
     }
 
 
+    public Long saveItem(Item item) {
+        Long l = itemRepository.saveItem(item);
+        return l;
+    }
+
+
 
 
 

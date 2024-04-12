@@ -13,7 +13,7 @@ import lombok.*;
 public class OrderItem {
 
     @Id @GeneratedValue
-    private long id;
+    private Long id;
 
     @Column(name="order_item_price")
     private long price;
@@ -21,7 +21,7 @@ public class OrderItem {
     private int count;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="orders_id")
+    @JoinColumn(name="order_id")
     @Setter
     private Order order;
 
@@ -40,15 +40,15 @@ public class OrderItem {
 
 
     // == 생성 메서드 ==
-    public static OrderItem createOrderItem(Item item, int orderPrice, int count){
+    public static OrderItem createOrderItem(Item item, int orderPrice, int orderStockQuantity){
         OrderItem orderItem = OrderItem.builder()
                 .item(item)
-                .count(count)
+                .count(orderStockQuantity)
                 .price(orderPrice)
                 .build();
 
         // == 아이템의 수량 감소 로직 ==
-        item.reduceStockQuantity(count);
+        item.reduceStockQuantity(orderStockQuantity);
         return orderItem;
 
     }

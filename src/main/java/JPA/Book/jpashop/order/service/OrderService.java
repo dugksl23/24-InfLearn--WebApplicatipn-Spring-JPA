@@ -4,6 +4,7 @@ package JPA.Book.jpashop.order.service;
 import JPA.Book.jpashop.Member.domain.Member;
 import JPA.Book.jpashop.Member.repository.MemberRepository;
 import JPA.Book.jpashop.delivery.domain.Delivery;
+import JPA.Book.jpashop.delivery.domain.DeliveryStatus;
 import JPA.Book.jpashop.item.domain.Item;
 import JPA.Book.jpashop.item.repository.ItemRepository;
 import JPA.Book.jpashop.order.domain.Order;
@@ -29,16 +30,16 @@ public class OrderService {
 
     //주문
     @Transactional
-    public Long order(Long memberId, Long itemId, int count) {
+    public Long  order(Long memberId, Long itemId, int orderStock) {
         // Member 조회
         Member member = memberRepository.findMemberById(memberId);
         // 아이템 조회
         Item item = itemRepository.getItemById(itemId);
         //배송 정보 조회
-        Delivery delivery = Delivery.builder().deliveryAddress(member.getAddress()).build();
+        Delivery delivery = Delivery.builder().deliveryAddress(member.getAddress()).status(DeliveryStatus.READY).build();
 
         // === 1. 주문 상품 생성 ===
-        OrderItem orderItem = OrderItem.createOrderItem(item, item.getPrice(), count);
+        OrderItem orderItem = OrderItem.createOrderItem(item, item.getPrice(), orderStock);
 
         // === 2. 주문을 생성 ===
         Order order = Order.createOrder(member, delivery, orderItem);
@@ -73,6 +74,10 @@ public class OrderService {
     //주문 전체 조회
     public List<Order> findAll() {
         return em.createQuery("select o from Order o", Order.class).getResultList();
+    }
+
+    public Order findOne(Long orderId) {
+        return em.find(Order.class, orderId);
     }
 
 

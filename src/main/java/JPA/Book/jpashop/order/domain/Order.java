@@ -24,26 +24,26 @@ public class Order {
 
     @Id
     @GeneratedValue
-    @Column(name = "orders_id")
+    @Column(name = "order_id")
     private Long id;
-    @Column(name = "orders_date", updatable = false)
+    @Column(name = "order_date", updatable = false)
     private LocalDateTime orderDate;
-    @Column(name = "orders_update")
+    @Column(name = "order_update")
     @CreatedDate //Java Spring에서 제공하는 라이브러리
     private LocalDateTime orderUpdate;
-    @Column(name = "orders_status")
+    @Column(name = "order_status")
     @Enumerated(EnumType.STRING)
 
     private OrderStatus orderStatus;
 
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "member_id") // 객체 세상에서는 다의 관계에 있는 Entity가 연관관계의 주인.
     // @JoinColumn 관계의 주인을 지정하는 컬럼이다.
     private Member member;
 
     @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<OrderItem> orderItems = new ArrayList<>();
+    private List<OrderItem> orderItems;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "delivery_id")
@@ -68,6 +68,9 @@ public class Order {
 
     public void addOrderItem(OrderItem orderItem) {
         //한개만 주문했을 때의 비지니스 로직
+//        if (orderItems == null) {
+//            orderItems = new ArrayList<>();
+//        }
         orderItems.add(orderItem);
         orderItem.setOrder(this); //List 컬렉션은 List 자체를 담거나, 각각의 객체를 담기도 한다.
     }
@@ -88,6 +91,7 @@ public class Order {
                 .member(member)
                 .delivery(delivery)
                 .orderStatus(OrderStatus.ORDER)
+                .orderItems(new ArrayList<>())
                 .build();
         //orderItems.stream().forEach(orderItem -> order.addOrderItem(orderItem));
         Arrays.stream(orderItems).forEach(orderItem -> order.addOrderItem(orderItem));

@@ -35,7 +35,7 @@ public class Member {
     // 연관관계의 주인이 아닐 경우 mappedBy 사용
     // orders 테이블에 있는 member 필드에 의해 연관관계 매핑
     //여기서 값을 설정해도 fk 값이 변경되지 않음
-    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Order> orders = new ArrayList<>();
 
 
