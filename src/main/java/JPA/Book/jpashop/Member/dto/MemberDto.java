@@ -4,10 +4,8 @@ package JPA.Book.jpashop.Member.dto;
 import JPA.Book.jpashop.Member.domain.Member;
 import JPA.Book.jpashop.item.adress.domain.Address;
 import JPA.Book.jpashop.order.domain.Order;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import jakarta.validation.constraints.NotEmpty;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,10 +14,12 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @Getter
+@Setter
 public class MemberDto {
 
-    private Long id;
+    @NotEmpty(message = "회원 이름은 필수입니다.")
     private String name;
+
     private Address address;
     private List<Order> orders = new ArrayList<>();
 

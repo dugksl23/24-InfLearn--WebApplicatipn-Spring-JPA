@@ -39,6 +39,10 @@ dependencies {
 	annotationProcessor "jakarta.annotation:jakarta.annotation-api"
 	annotationProcessor "jakarta.persistence:jakarta.persistence-api"
 
+	//Hibernate Validator:
+	// Hibernate Validator는 Java Bean 유효성 검사(JSR 380)를 위한 구현체 중 하나입니다.
+	// Hibernate Validator에서 제공되는 어노테이션 중 하나가 @NotEmpty입니다
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: '2.5.2'
 }
 
 tasks.named('test') {
