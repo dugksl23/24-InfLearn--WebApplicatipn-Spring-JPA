@@ -4,8 +4,9 @@ package JPA.Book.jpashop.Member.dto;
 import JPA.Book.jpashop.Member.domain.Member;
 import JPA.Book.jpashop.item.adress.domain.Address;
 import JPA.Book.jpashop.order.domain.Order;
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.persistence.Column;
 import lombok.*;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +19,7 @@ import java.util.List;
 public class MemberDto {
 
     @NotEmpty(message = "회원 이름은 필수입니다.")
+    @Column(name = "name")
     private String name;
 
     private Address address;

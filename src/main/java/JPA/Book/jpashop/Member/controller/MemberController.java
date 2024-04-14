@@ -24,9 +24,9 @@ public class MemberController {
     private final MemberService memberService;
 
     @GetMapping(value = "/signup")
-    public String signup(Model model) {
+    public String signup(Model model, MemberDto memberDto) {
         log.info("signup get으로 들어옴");
-        Model signup = model.addAttribute("signupForm", new MemberDto());
+        //Model signup = model.addAttribute("memberDto", new MemberDto());
         // Model은, controller에서 view에 data를 전달하는 객체
         return "member/signup";
     }
@@ -35,11 +35,10 @@ public class MemberController {
     public String signup(@Valid MemberDto memberDto, BindingResult bindingResult, Model model) {
         //@Valid : Java Validation 라이브러리에서 제공하는 어노테이션
         //         해당 객체에 @NotNull, @NotEmpty 가 붙은 필드를 대상으로 validation 진행
-        log.info("signup post으로 들어옴");
-
         if (bindingResult.hasErrors()) {
             // 바인딩 에러가 있을 때 처리하는 로직
-            return "error"; // 에러 페이지로 이동하거나 다른 처리를 수행할 수 있음
+            // 에러 페이지로 이동하거나 다른 처리를 수행할 수 있음
+            return "/member/signup";
         }
 
 
