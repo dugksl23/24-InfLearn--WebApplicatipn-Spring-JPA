@@ -1,6 +1,7 @@
 package JPA.Book.jpashop.Member.dto;
 
 
+import JPA.Book.jpashop.Member.domain.Member;
 import JPA.Book.jpashop.item.adress.domain.Address;
 import JPA.Book.jpashop.order.domain.Order;
 import jakarta.validation.constraints.NotBlank;
@@ -8,6 +9,7 @@ import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -21,5 +23,20 @@ public class MemberResponseDto {
     private String name;
     private Address address;
     private List<Order> orders = new ArrayList<>();
+
+    public static List<MemberResponseDto> toMemberResponseDto(List<Member> allMembers) {
+        List<MemberResponseDto> memberList = allMembers.stream().map(member -> {
+                    MemberResponseDto response = MemberResponseDto.builder()
+                            .id(member.getId())
+                            .name(member.getName())
+                            .address(member.getAddress())
+                            .build();
+
+                    return response;
+                })
+                .collect(Collectors.toList());
+        return memberList;
+
+    }
 
 }

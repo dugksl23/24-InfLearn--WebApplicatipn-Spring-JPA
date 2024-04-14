@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 @Slf4j
@@ -63,16 +62,7 @@ public class MemberController {
     @GetMapping("/memberList")
     public String memberList(Model model) {
         List<Member> allMember = memberService.findAllMember();
-        List<MemberResponseDto> memberList = allMember.stream().map(member -> {
-                    MemberResponseDto response = MemberResponseDto.builder()
-                            .id(member.getId())
-                            .name(member.getName())
-                            .address(member.getAddress())
-                            .build();
-
-                    return response;
-                })
-                .collect(Collectors.toList());
+        List<MemberResponseDto> memberList = MemberResponseDto.toMemberResponseDto(allMember);
 
         model.addAttribute("memberList", memberList);
         //response 객체는 되도록 dto를 통해 데이터만 넘기는 것이 바람직하다.
