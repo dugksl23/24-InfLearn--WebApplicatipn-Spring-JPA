@@ -4,9 +4,8 @@ package JPA.Book.jpashop.Member.dto;
 import JPA.Book.jpashop.Member.domain.Member;
 import JPA.Book.jpashop.item.adress.domain.Address;
 import JPA.Book.jpashop.order.domain.Order;
-import jakarta.persistence.Column;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
-import org.hibernate.validator.constraints.NotEmpty;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,8 +17,7 @@ import java.util.List;
 @Setter
 public class MemberDto {
 
-    @NotEmpty(message = "회원 이름은 필수입니다.")
-    @Column(name = "name")
+    @NotBlank(message = "회원 이름은 필수입니다.") // null,"", " " 를 모두 허용하지 않는다.
     private String name;
 
     private Address address;
