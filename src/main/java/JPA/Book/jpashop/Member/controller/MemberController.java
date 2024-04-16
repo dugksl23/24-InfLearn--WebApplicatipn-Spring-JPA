@@ -28,8 +28,8 @@ public class MemberController {
 
     @GetMapping(value = "/signup")
     public String signup(Model model, MemberDto memberDto) {
-        log.info("signup get으로 들어옴");
-        model.addAttribute("memberDto", new MemberDto());
+        model.addAttribute("memberDto", memberDto);
+
         // Model은, controller에서 view에 data를 전달하는 객체
         return "member/signup";
     }
@@ -40,19 +40,14 @@ public class MemberController {
         //         해당 객체에 @NotNull, @NotEmpty 가 붙은 필드를 대상으로 validation 진행
         if (bindingResult.hasErrors()) {
             // 어떤 필드를 대상으로 error가 났는지 특정하는 메서드
-            if (bindingResult.hasFieldErrors("name")) {
+            if (bindingResult.hasFieldErrors("address.city")) {
                 log.info("filed error 남");
             }
             // 바인딩 에러가 있을 때 처리하는 로직
             // 에러 페이지로 이동하거나 다른 처리를 수행할 수 있음
-            return "/member/signup";
+            return "member/signup";
         }
-
-
-        Member entity = MemberDto.builder()
-                .name(memberDto.getName())
-                .address(memberDto.getAddress())
-                .build().toEntity();
+        Member entity = MemberDto.builder().name(memberDto.getName()).address(memberDto.getAddress()).build().toEntity();
 
         Long signup = memberService.signup(entity);
 

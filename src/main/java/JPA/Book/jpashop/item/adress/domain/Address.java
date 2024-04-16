@@ -1,6 +1,7 @@
 package JPA.Book.jpashop.item.adress.domain;
 
 import jakarta.persistence.Embeddable;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,14 +12,16 @@ import lombok.Setter;
 //@NoArgsConstructor // public 기본 생성자
 public class Address {
 
-    private String street;
+    @NotBlank(message = "입력해주세요")
     private String city;
+
+    private String street;
     private String zipCode;
 
     protected Address() {
     }
 
-    public Address(String street, String city, String zipCode) {
+    public Address(String city, String street, String zipCode) {
         this.street = street;
         this.city = city;
         this.zipCode = zipCode;

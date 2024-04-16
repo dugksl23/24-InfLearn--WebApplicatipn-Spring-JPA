@@ -8,35 +8,39 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Slf4j
 public class BookDto extends ItemDto {
 
     @NotBlank(message = "입력해주세요.")
-    private String title;
-    @NotBlank(message = "입력해주세요.")
     private String author;
-    @NotBlank(message = "입력해주세요.")
+    //    @NotBlank(message = "입력해주세요.")
     private String isbn;
+
+    //    @NotBlank(message = "입력해주세요.")
+    //    private String name;
+    //    부모 class의 속성값과 어노테이션 설정을 모두 이어받는다.
 
 //    @NotBlank
 //    private int price;
 //    @NotBlank
 //    private int stockQuantity;
 
-    public Item registerItem(ItemDto itemDto) {
+    public Item registerItem() {
 
         //==　1. view 에서 특정 Item (Book) 을 등록 ==
         Item book = Book.builder()
-                .author("Yohan").isbn("ABCD").build();
+                .author(getAuthor()).isbn(getIsbn()).build();
         //== 2. view에서 아이템의 종류(Book)의 수량과 가격을 등록
-        book.setPrice(itemDto.getPrice());
-        book.setStockQuantity(itemDto.getStockQuantity());
+        book.setPrice(getPrice());
+        book.setStockQuantity(getStockQuantity());
         book.getCategories();
-        book.setName(itemDto.getName());
+        book.setName(getName());
         //== 3. Item 객체 Entity로 값을 반환.
         return book;
     }

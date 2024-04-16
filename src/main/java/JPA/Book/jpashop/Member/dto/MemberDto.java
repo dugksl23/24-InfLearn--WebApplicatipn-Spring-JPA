@@ -19,7 +19,6 @@ public class MemberDto {
 
     @NotBlank(message = "회원 이름은 필수입니다.") // null,"", " " 를 모두 허용하지 않는다.
     private String name;
-
     private Address address;
     private List<Order> orders = new ArrayList<>();
 

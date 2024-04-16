@@ -3,7 +3,6 @@ package JPA.Book.jpashop.category.domain;
 
 import JPA.Book.jpashop.item.domain.Item;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,7 +19,7 @@ public class Category {
     private Long id;
 
     @Column(name = "category_name")
-    @NotBlank(message = "입력해주세요.")
+//    @NotBlank(message = "입력해주세요.")
     private String name;
 
     @ManyToMany
