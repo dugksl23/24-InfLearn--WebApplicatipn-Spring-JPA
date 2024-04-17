@@ -16,7 +16,7 @@ public class OrderItem {
     private Long id;
 
     @Column(name="order_item_price")
-    private long price;
+    private int price;
     @Column(name="order_item_count")
     private int count;
 

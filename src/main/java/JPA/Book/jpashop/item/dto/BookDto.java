@@ -4,10 +4,7 @@ package JPA.Book.jpashop.item.dto;
 import JPA.Book.jpashop.item.domain.Item;
 import JPA.Book.jpashop.item.subItems.Book;
 import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 
 @Getter
@@ -15,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 @NoArgsConstructor
 @Slf4j
+@Builder
 public class BookDto extends ItemDto {
 
     private Long id;
@@ -46,7 +44,7 @@ public class BookDto extends ItemDto {
         return book;
     }
 
-    public Book fromItemDto(BookDto bookDto) {
+    public static Book fromItemDto(BookDto bookDto) {
         Book book = Book.builder()
                 .author(bookDto.getAuthor())
                 .isbn(bookDto.getIsbn())
@@ -56,5 +54,18 @@ public class BookDto extends ItemDto {
         book.setStockQuantity(bookDto.getStockQuantity());
         book.setName(bookDto.getName());
         return book;
+    }
+
+    public static BookDto fromBook(Book book) {
+        BookDto build = BookDto.builder()
+                        .id(book.getId())
+                        .author(book.getAuthor())
+                        .isbn(book.getIsbn())
+                        .build();
+        build.setId(book.getId());
+        build.setPrice(book.getPrice());
+        build.setStockQuantity(book.getStockQuantity());
+        build.setName(book.getName());
+        return build;
     }
 }

@@ -41,7 +41,6 @@ public class MemberController {
         if (bindingResult.hasErrors()) {
             // 어떤 필드를 대상으로 error가 났는지 특정하는 메서드
             if (bindingResult.hasFieldErrors("address.city")) {
-                log.info("filed error 남");
             }
             // 바인딩 에러가 있을 때 처리하는 로직
             // 에러 페이지로 이동하거나 다른 처리를 수행할 수 있음

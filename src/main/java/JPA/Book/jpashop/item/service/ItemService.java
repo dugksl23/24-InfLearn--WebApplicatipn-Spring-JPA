@@ -37,9 +37,14 @@ public class ItemService {
     }
 
     @Transactional
-    public Long updateItem(Item item) {
-        Long l = itemRepository.saveItem(item);
-        return l;
+    public Long updateItem(Long id, String name, int price, int stockQuantity) {
+        Item book = itemRepository.getItemById(id);
+        book.setName(name);
+        book.setPrice(price);
+        book.setStockQuantity(stockQuantity);
+        // -> 지금은 예제라서 setter를 사용하지만,
+        // 되도록이면 change()와 같은 별도 함수로 필요한 값만 받아서 변경하는 것이 유지보수에 유리하다.
+        return book.getId();
     }
 
 
