@@ -14,7 +14,6 @@ public class Address {
 
     @NotBlank(message = "입력해주세요")
     private String city;
-
     private String street;
     private String zipCode;
 

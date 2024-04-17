@@ -36,6 +36,11 @@ public class ItemService {
         return l;
     }
 
+    @Transactional
+    public Long updateItem(Item item) {
+        Long l = itemRepository.saveItem(item);
+        return l;
+    }
 
 
 

@@ -4,12 +4,14 @@ package JPA.Book.jpashop.item.repository;
 import JPA.Book.jpashop.item.domain.Item;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
+@Slf4j
 public class ItemRepository {
 
     //@PersistenceContext SpringJPA가 스프링 빈으로 등록

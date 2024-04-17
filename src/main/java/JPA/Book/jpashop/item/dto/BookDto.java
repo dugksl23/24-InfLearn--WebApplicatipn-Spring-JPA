@@ -17,9 +17,10 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class BookDto extends ItemDto {
 
+    private Long id;
     @NotBlank(message = "입력해주세요.")
     private String author;
-    //    @NotBlank(message = "입력해주세요.")
+    @NotBlank(message = "입력해주세요.")
     private String isbn;
 
     //    @NotBlank(message = "입력해주세요.")
@@ -42,6 +43,18 @@ public class BookDto extends ItemDto {
         book.getCategories();
         book.setName(getName());
         //== 3. Item 객체 Entity로 값을 반환.
+        return book;
+    }
+
+    public Book fromItemDto(BookDto bookDto) {
+        Book book = Book.builder()
+                .author(bookDto.getAuthor())
+                .isbn(bookDto.getIsbn())
+                .build();
+        book.setId(bookDto.getId());
+        book.setPrice(bookDto.getPrice());
+        book.setStockQuantity(bookDto.getStockQuantity());
+        book.setName(bookDto.getName());
         return book;
     }
 }
