@@ -79,6 +79,4 @@ public class OrderService {
     public Order findOne(Long orderId) {
         return em.find(Order.class, orderId);
     }
-
-
 }
