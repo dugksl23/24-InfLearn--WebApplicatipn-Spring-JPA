@@ -10,6 +10,7 @@ import JPA.Book.jpashop.item.subItems.Album;
 import JPA.Book.jpashop.item.subItems.Book;
 import JPA.Book.jpashop.order.domain.Order;
 import JPA.Book.jpashop.order.domain.OrderStatus;
+import JPA.Book.jpashop.order.repository.OrderRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -35,6 +36,8 @@ class OrderServiceTest {
     private MemberService memberService;
     @Autowired
     private ItemService itemService;
+    @Autowired
+    private OrderRepository orderRepository;
 
 
     @Test
@@ -73,7 +76,8 @@ class OrderServiceTest {
         assertEquals("상품 주문 시 배송 상태는 COM ", DeliveryStatus.READY, one.getDelivery().getStatus());
         assertEquals("주문한 상품 종류 수가 정확해야 한다. ", 1, one.getOrderItems().size());
         assertEquals("주문 가격은 가격 * 수량이다. ", book.getPrice() * one.getOrderItems().get(0).getCount(), one.getOrderItems().get(0).getTotalPrice());
-        assertEquals("주문 수량만큼 재고가 감소해야 한다. ", 8, one.getOrderItems().get(0).getItem().getStockQuantity());
+        assertEquals("주문 수량만큼 재고가 감소해야 한다. ", 8, one.getOrderItems().get(0).getItem().
+                getStockQuantity());
 
     }
 
@@ -126,4 +130,5 @@ class OrderServiceTest {
         Assertions.assertThat(stockQuantity).isEqualTo(10);
 
     }
+
 }

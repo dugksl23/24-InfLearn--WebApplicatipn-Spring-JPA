@@ -8,6 +8,7 @@ import JPA.Book.jpashop.delivery.domain.DeliveryStatus;
 import JPA.Book.jpashop.item.domain.Item;
 import JPA.Book.jpashop.item.repository.ItemRepository;
 import JPA.Book.jpashop.order.domain.Order;
+import JPA.Book.jpashop.order.domain.OrderSearch;
 import JPA.Book.jpashop.order.repository.OrderRepository;
 import JPA.Book.jpashop.orderItem.domain.OrderItem;
 import jakarta.persistence.EntityManager;
@@ -79,4 +80,10 @@ public class OrderService {
     public Order findOne(Long orderId) {
         return em.find(Order.class, orderId);
     }
+
+    public List<Order> findOrders(OrderSearch orderSearch) {
+        List<Order> orderList = orderRepository.findAllOrders(orderSearch);
+        return orderList;
+    }
 }
+

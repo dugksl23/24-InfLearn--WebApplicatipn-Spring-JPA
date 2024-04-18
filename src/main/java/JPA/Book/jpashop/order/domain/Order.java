@@ -7,7 +7,8 @@ import JPA.Book.jpashop.delivery.domain.DeliveryStatus;
 import JPA.Book.jpashop.orderItem.domain.OrderItem;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -27,13 +28,14 @@ public class Order {
     @Column(name = "order_id")
     private Long id;
     @Column(name = "order_date", updatable = false)
+    @CreationTimestamp
     private LocalDateTime orderDate;
     @Column(name = "order_update")
-    @CreatedDate //Java Spring에서 제공하는 라이브러리
-    private LocalDateTime orderUpdate;
+//    @CreatedDate //Java Spring에서 제공하는 라이브러리
+    @UpdateTimestamp
+    private LocalDateTime orderUpdateDate;
     @Column(name = "order_status")
     @Enumerated(EnumType.STRING)
-
     private OrderStatus orderStatus;
 
 
