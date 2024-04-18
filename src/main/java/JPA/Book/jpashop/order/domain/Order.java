@@ -36,6 +36,7 @@ public class Order {
     private LocalDateTime orderUpdateDate;
     @Column(name = "order_status")
     @Enumerated(EnumType.STRING)
+
     private OrderStatus orderStatus;
 
 

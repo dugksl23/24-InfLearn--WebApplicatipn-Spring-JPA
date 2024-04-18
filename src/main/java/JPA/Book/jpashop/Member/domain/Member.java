@@ -3,6 +3,7 @@ package JPA.Book.jpashop.Member.domain;
 import JPA.Book.jpashop.item.adress.domain.Address;
 import JPA.Book.jpashop.order.domain.Order;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ public class Member {
     @Column(name="member_id")
     private Long id;
     @Column(name="memberName")
+    @NotBlank(message = "입력해주세요")
     private String name;
     @Embedded //임베디드 타입, 내장 타입(종속변수)로 활용하는 Entity에서 @Embedded 어노테이션을 활용하면,
               // 해당 class에서는 @Embeddable 을 하지 않아도 되지만, 일반적으로 둘다 활용.
