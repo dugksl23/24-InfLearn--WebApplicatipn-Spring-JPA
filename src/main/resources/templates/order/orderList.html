@@ -52,6 +52,7 @@
                     <a th:if="${order.orderStatus.name() == 'ORDER'}" href="#"
                        th:href="'javascript:cancel('+${order.id}+')'"
                        class="btn btn-danger">CANCEL</a>
+                    <!-- get 방식으로 order.id를 전달하며, orderStatus가 order일 경우에 나오도록 하였다.-->
                 </td>
             </tr>
             </tbody>
@@ -64,7 +65,7 @@
     function cancel(id) {
         var form = document.createElement("form");
         form.setAttribute("method", "post");
-        form.setAttribute("action", "/order/" + id + "/cancel");
+        form.setAttribute("action", "/order/cancel/"+id);
         document.body.appendChild(form);
         form.submit();
     } </script>

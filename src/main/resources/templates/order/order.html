@@ -26,7 +26,11 @@
         <div class="form-group">
             <label for="count">주문수량</label>
             <input type="number" name="count" class="form-control" id="count"
-                   placeholder="주문 수량을 입력하세요"></div>
+                   placeholder="주문 수량을 입력하세요">
+            <div th:if="${error}" class="error">
+                <p th:text="${error}"></p>
+            </div>
+        </div>
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
     <br/>

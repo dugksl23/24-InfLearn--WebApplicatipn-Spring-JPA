@@ -66,7 +66,7 @@ class OrderServiceTest {
         Long bookId = itemService.saveItem(book);
         //when
         int orderStock = 2;
-        Long order = orderService.order(memberId, bookId, orderStock);
+        Long order = orderService.order(memberId, bookId, orderStock, model);
 
         //then
         Order one = orderService.findOne(order);
@@ -100,7 +100,7 @@ class OrderServiceTest {
         Long albumId = itemService.saveItem(album);
 
         Integer orderItemQuantity = 3;
-        Long order = orderService.order(memberId, album.getId(), orderItemQuantity);
+        Long order = orderService.order(memberId, album.getId(), orderItemQuantity, model);
 
         //then
         fail("재고 수량 부족 예외가 발생해야 한다.");
@@ -121,7 +121,7 @@ class OrderServiceTest {
         Long bookId = itemService.saveItem(item);
 
         //when
-        Long order = orderService.order(member.getId(), bookId, 5);
+        Long order = orderService.order(member.getId(), bookId, 5, model);
         orderService.cancelOrder(order);
 
         //then

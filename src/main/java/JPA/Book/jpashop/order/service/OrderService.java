@@ -31,7 +31,7 @@ public class OrderService {
 
     //주문
     @Transactional
-    public Long  order(Long memberId, Long itemId, int orderStock) {
+    public Long order(Long memberId, Long itemId, int orderStock) {
         // Member 조회
         Member member = memberRepository.findMemberById(memberId);
         // 아이템 조회
@@ -53,16 +53,15 @@ public class OrderService {
         // 해당 필드값들을 Private owner만 embadded 값으로만 참조된다면 cascade 사용을 권장.
         // 즉 라이프사이클이 private Owner(order)에 국한된다면 사용가능.
         Order orderById = orderRepository.findOrderById(orderId);
-        return orderId ;
+        return orderId;
     }
 
     //취소
+    @Transactional
     public void cancelOrder(Long orderId) {
         Order orderById = orderRepository.findOrderById(orderId);
         Delivery delivery = orderById.getDelivery();
-        orderById.cancelOrder(orderById.getMember(), orderById.getDelivery() );
-
-        //Member member, Delivery delivery, OrderStatus orderStatus) {
+        orderById.cancelOrder(orderById.getMember(), orderById.getDelivery());
     }
 
 
