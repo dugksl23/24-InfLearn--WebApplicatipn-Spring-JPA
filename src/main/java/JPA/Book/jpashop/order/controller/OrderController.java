@@ -56,12 +56,9 @@ public class OrderController {
 
     @GetMapping("/orderList")
     public String orderList(@ModelAttribute("orderSearch") OrderSearch orderSearch, Model model) {
-
-        log.info("memberName: {}, orderStatus : {}", orderSearch.getMemberName(), orderSearch.getOrderStatus());
-        //form으로 request된 object를 바인딩하는 메서드의 매개변수는 자동으로 model 객체에 담긴다.
+        //**@ModelAttribute（）가 적용된 객체는 Model에 자동 저장된다.
         List<Order> orderList = orderService.findOrders(orderSearch);
         model.addAttribute("orderList", orderList);
-//        orderService.searchOrder();
         return "order/orderList";
 
     }

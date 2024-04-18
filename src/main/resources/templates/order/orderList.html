@@ -10,7 +10,7 @@
             <form th:object="${orderSearch}" class="form-inline">
                 <div class="form-group mb-2">
                     <input type="text" th:field="*{memberName}" class="form- control" placeholder="회원명"/>
-                   <!-- th:filed="" 은 해당 태그의 id 값과 name 값을 설정.-->
+                    <!-- th:filed="" 은 해당 태그의 id 값과 name 값을 설정.-->
                 </div>
                 <div class="form-group mx-sm-1 mb-2">
                     <select th:field="*{orderStatus}" class="form-control">
@@ -65,8 +65,10 @@
     function cancel(id) {
         var form = document.createElement("form");
         form.setAttribute("method", "post");
-        form.setAttribute("action", "/order/cancel/"+id);
+        form.setAttribute("action", "/order/cancel/" + id);
         document.body.appendChild(form);
         form.submit();
-    } </script>
+    }
+
+</script>
 </html>
