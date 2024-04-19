@@ -73,7 +73,9 @@ spring:
 
   jpa:
     hibernate:
+#      ddl-auto: create
       ddl-auto: create
+#      none : db를 변경하지 않고 계속 사용하는 설정.
     properties:
       hibernate:
         #        show_sql: true
