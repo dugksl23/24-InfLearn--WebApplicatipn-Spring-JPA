@@ -43,9 +43,28 @@
             <tr th:each="order : ${orderList}">
                 <td th:text="${order.id}"></td>
                 <td th:text="${order.member.name}"></td>
-                <td th:text="${order.orderItems[0].item.name}"></td>
-                <td th:text="${order.orderItems[0].price}"></td>
-                <td th:text="${order.orderItems[0].count}"></td>
+                <!-- order.orderItems에 저장된 모든 주문 항목을 반복 -->
+                <td>
+                    <span th:each="orderItem : ${order.orderItems}">
+                    <span th:text="${orderItem.item.name}"></span>
+                </span>
+                </td>
+
+                <td>
+                    <span th:each="orderItem : ${order.orderItems}">
+                    <span th:text="${orderItem.item.price}"></span>
+                </span>
+                </td>
+                <td>
+                    <span th:each="orderItem : ${order.orderItems}">
+                    <span th:text="${orderItem.item.stockQuantity}"></span>
+                </span>
+                </td>
+
+                <!--                <td th:text="${order.orderItems[0].item.name}"></td>-->
+                <!--                <td th:text="${order.orderItems[0].price}"></td>-->
+                <!--                <td th:text="${order.orderItems[0].count}"></td>-->
+                <!-- order.orderItems에 저장된 모든 주문 항목을 반복 -->
                 <td th:text="${order.orderStatus}"></td>
                 <td th:text="${order.orderDate}"></td>
                 <td>

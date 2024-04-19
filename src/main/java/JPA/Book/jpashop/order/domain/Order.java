@@ -83,13 +83,13 @@ public class Order {
         delivery.setOrder(this);
     }
 
-
+    /**
+     *  OrderItem... orderItems
+     *  OrderItem 타입의 가변인자를 나타냅니다.
+     *  이 메소드를 호출할 때는 다음과 같이 여러 개의 OrderItem 인스턴스를 전달할 수 있습니다.
+     */
     // == 생성 메서드 ==
     public static Order createOrder(Member member, Delivery delivery, OrderItem... orderItems) {
-        /*
-         *  OrderItem... orderItems는 OrderItem 타입의 가변인자를 나타냅니다.
-         *  이 메소드를 호출할 때는 다음과 같이 여러 개의 OrderItem 인스턴스를 전달할 수 있습니다.
-         * */
         Order order = Order.builder()
                 .member(member)
                 .delivery(delivery)
