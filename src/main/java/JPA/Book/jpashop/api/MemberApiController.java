@@ -6,10 +6,7 @@ import JPA.Book.jpashop.Member.services.MemberService;
 import jakarta.validation.Valid;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 /*
@@ -35,6 +32,14 @@ public class MemberApiController {
 
         Long memberId = memberService.signup(request.createApiMemberRequest());
         return ApiMemberResponse.createMemberResponse(memberId, request.getMemberName(), request.getAddress());
+    }
+
+    @PutMapping("/v2/update/{memberId}")
+    public ApiMemberResponse updateMemberV2(
+            @PathVariable("memberId") Long memberId,
+            @RequestBody @Valid ApiUpdateMemberRequest request) {
+
+        return memberService.update(memberId, request.getMemberName(), request.getAddress());
     }
 
 }

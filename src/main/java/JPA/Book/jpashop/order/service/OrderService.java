@@ -16,7 +16,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Transactional(readOnly = true)
@@ -41,10 +43,10 @@ public class OrderService {
 
         // === 1. 주문 상품 생성 ===
         OrderItem orderItem = OrderItem.createOrderItem(item, item.getPrice(), orderStock);
-
+        //-> List<OrderItem> orderItems = createOrderItem에서 list로 처리해야 한다.
         // === 2. 주문을 생성 ===
         Order order = Order.createOrder(member, delivery, orderItem);
-
+        Map<Object, String> productInfo = new HashMap<>();
         // === 3. 주문을 저장  ==
         Long orderId = orderRepository.saveOrder(order);
         //Order의 Cascase 옵션에 의해 연관 관계에 있는 모든 Entity의 데이터가 영속화된다.

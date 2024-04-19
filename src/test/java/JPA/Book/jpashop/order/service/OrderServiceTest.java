@@ -11,6 +11,7 @@ import JPA.Book.jpashop.item.subItems.Book;
 import JPA.Book.jpashop.order.domain.Order;
 import JPA.Book.jpashop.order.domain.OrderStatus;
 import JPA.Book.jpashop.order.repository.OrderRepository;
+import JPA.Book.jpashop.orderItem.domain.OrderItem;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -39,7 +40,6 @@ class OrderServiceTest {
     @Autowired
     private OrderRepository orderRepository;
 
-
     @Test
     @DisplayName("상품 주문")
     void order() {
@@ -64,10 +64,17 @@ class OrderServiceTest {
         book.setPrice(10000);
         book.setStockQuantity(10);
         Long bookId = itemService.saveItem(book);
+
+        Book book1 = new Book();
+        book1.setName("시골 JPA11");
+        book1.setPrice(10000);
+        book1.setStockQuantity(10);
+        Long bookId1 = itemService.saveItem(book1);
+
         //when
         int orderStock = 2;
         Long order = orderService.order(memberId, bookId, orderStock);
-
+        Long order1 = orderService.order(memberId, bookId1, orderStock);
         //then
         Order one = orderService.findOne(order);
         Assertions.assertThat(one.getId()).isEqualTo(order);
@@ -76,9 +83,12 @@ class OrderServiceTest {
         assertEquals("상품 주문 시 배송 상태는 COM ", DeliveryStatus.READY, one.getDelivery().getStatus());
         assertEquals("주문한 상품 종류 수가 정확해야 한다. ", 1, one.getOrderItems().size());
         assertEquals("주문 가격은 가격 * 수량이다. ", book.getPrice() * one.getOrderItems().get(0).getCount(), one.getOrderItems().get(0).getTotalPrice());
+        assertEquals("주문 가격 List 별 sum()은? ", book.getPrice() * one.getOrderItems().get(0).getCount(), one.getOrderItems().stream().mapToInt(OrderItem::getTotalPrice).sum());
         assertEquals("주문 수량만큼 재고가 감소해야 한다. ", 8, one.getOrderItems().get(0).getItem().
                 getStockQuantity());
 
+        System.out.println();
+        System.out.println("sum의 값은 {}" + one.getOrderItems().stream().mapToInt(OrderItem::getTotalPrice).sum());
     }
 
     //@Test(expected = ChangeSetPersister.NotFoundException.class)

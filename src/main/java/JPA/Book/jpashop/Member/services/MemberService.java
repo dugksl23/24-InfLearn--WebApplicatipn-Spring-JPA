@@ -3,6 +3,8 @@ package JPA.Book.jpashop.Member.services;
 
 import JPA.Book.jpashop.Member.domain.Member;
 import JPA.Book.jpashop.Member.repository.MemberRepository;
+import JPA.Book.jpashop.api.ApiMemberResponse;
+import JPA.Book.jpashop.item.adress.domain.Address;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -52,4 +54,13 @@ public class MemberService {
         return memberRepository.findMemberById(id);
     }
 
+    @Transactional
+    public ApiMemberResponse update(Long memberId, String memberName, Address address) {
+        Member memberById = memberRepository.findMemberById(memberId);
+        memberById.updateMember(memberName, address);
+        // == 커맨드와 Query의 분리 원칙으로 인해 Query를 다시 생성.
+        Member updatedMember = memberRepository.findMemberById(memberId);
+
+        return ApiMemberResponse.createMemberResponse(updatedMember.getId(), updatedMember.getName(), updatedMember.getAddress());
+    }
 }

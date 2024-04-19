@@ -17,14 +17,15 @@ import java.util.List;
 public class Member {
 
 
-    @Id @GeneratedValue
-    @Column(name="member_id")
+    @Id
+    @GeneratedValue
+    @Column(name = "member_id")
     private Long id;
-    @Column(name="memberName")
+    @Column(name = "memberName")
     @NotBlank(message = "입력해주세요")
     private String name;
     @Embedded //임베디드 타입, 내장 타입(종속변수)로 활용하는 Entity에서 @Embedded 어노테이션을 활용하면,
-              // 해당 class에서는 @Embeddable 을 하지 않아도 되지만, 일반적으로 둘다 활용.
+    // 해당 class에서는 @Embeddable 을 하지 않아도 되지만, 일반적으로 둘다 활용.
     private Address address;
 
     //DB입장에서는 Order_id를 외부키로 매핑한다.
@@ -44,5 +45,8 @@ public class Member {
     //1. db에서는 기본키와 외래키로 나눈다. 관계의 주인(보통 다의 관계에 해당하는 Entity)이 해당 테이블에 기본키와 외래키를 갖는다. 즉 연관관계의 주인이 된다.
     //2. 객체 세상에서는 외래키로 매핑된 다의 입장을 연관관계의 주인으로 본다.
 
-
+    public void updateMember(String memberName, Address address) {
+        this.name = memberName;
+        this.address = address;
+    }
 }
