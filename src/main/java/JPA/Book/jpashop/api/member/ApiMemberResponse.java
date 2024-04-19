@@ -1,4 +1,4 @@
-package JPA.Book.jpashop.api;
+package JPA.Book.jpashop.api.member;
 
 import JPA.Book.jpashop.item.adress.domain.Address;
 import lombok.AllArgsConstructor;

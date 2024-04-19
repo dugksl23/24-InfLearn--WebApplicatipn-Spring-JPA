@@ -5,6 +5,7 @@ import JPA.Book.jpashop.Member.domain.Member;
 import JPA.Book.jpashop.delivery.domain.Delivery;
 import JPA.Book.jpashop.delivery.domain.DeliveryStatus;
 import JPA.Book.jpashop.orderItem.domain.OrderItem;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -36,18 +37,17 @@ public class Order {
     private LocalDateTime orderUpdateDate;
     @Column(name = "order_status")
     @Enumerated(EnumType.STRING)
-
     private OrderStatus orderStatus;
-
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "member_id") // 객체 세상에서는 다의 관계에 있는 Entity가 연관관계의 주인.
-    // @JoinColumn 관계의 주인을 지정하는 컬럼이다.
+    //관계의 주인을 지정하는 컬럼이다.
     private Member member;
 
     @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<OrderItem> orderItems;
 
+    @JsonIgnore
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "delivery_id")
     //하나의 주문은 하나의 배송정보를 갖기에 둘다 1:1 관계이다.

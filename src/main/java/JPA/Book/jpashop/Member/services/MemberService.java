@@ -3,7 +3,7 @@ package JPA.Book.jpashop.Member.services;
 
 import JPA.Book.jpashop.Member.domain.Member;
 import JPA.Book.jpashop.Member.repository.MemberRepository;
-import JPA.Book.jpashop.api.ApiMemberResponse;
+import JPA.Book.jpashop.api.member.ApiMemberResponse;
 import JPA.Book.jpashop.item.adress.domain.Address;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

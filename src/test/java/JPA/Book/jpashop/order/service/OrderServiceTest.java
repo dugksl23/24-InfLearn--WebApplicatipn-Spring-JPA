@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import static org.springframework.test.util.AssertionErrors.assertEquals;
 import static org.springframework.test.util.AssertionErrors.fail;
 
-@RunWith(SpringRunner.class)
+@RunWith( SpringRunner.class)
 @SpringBootTest
 @Transactional
 class OrderServiceTest {

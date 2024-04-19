@@ -2,7 +2,6 @@ package JPA.Book.jpashop.Member.domain;
 
 import JPA.Book.jpashop.item.adress.domain.Address;
 import JPA.Book.jpashop.order.domain.Order;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
@@ -39,10 +38,8 @@ public class Member {
     // 연관관계의 주인이 아닐 경우 mappedBy 사용
     // orders 테이블에 있는 member 필드에 의해 연관관계 매핑
     //여기서 값을 설정해도 fk 값이 변경되지 않음
-    @JsonIgnore //Json Data 로 바인딩할 필드를 제외하는 어노테이션
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Order> orders = new ArrayList<>();
-
 
     //1. db에서는 기본키와 외래키로 나눈다. 관계의 주인(보통 다의 관계에 해당하는 Entity)이 해당 테이블에 기본키와 외래키를 갖는다. 즉 연관관계의 주인이 된다.
     //2. 객체 세상에서는 외래키로 매핑된 다의 입장을 연관관계의 주인으로 본다.
