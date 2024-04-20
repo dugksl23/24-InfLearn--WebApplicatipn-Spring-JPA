@@ -21,12 +21,12 @@ public class ApiSimpleOrderDto {
     private Long memberId;
     private LocalDateTime orderDate;
     private OrderStatus orderStatus;
-    private String name;
+    private String memberName;
     private Address deliveryAddress;
 
     public ApiSimpleOrderDto(Order order) {
 
-        this.name = order.getMember().getName();
+        this.memberName = order.getMember().getName();
         this.orderDate = order.getOrderDate();
         this.memberId = order.getMember().getId();
         this.orderId = order.getId();

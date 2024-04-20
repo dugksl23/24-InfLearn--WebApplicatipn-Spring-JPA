@@ -47,11 +47,11 @@ public class OrderRepository {
         }
 
         //회원 이름 검색
-        if (StringUtils.hasText(orderSearch.getMemberName())){
-            if(isFirstCondition){
+        if (StringUtils.hasText(orderSearch.getMemberName())) {
+            if (isFirstCondition) {
                 jpql += " where";
                 isFirstCondition = false;
-            }else{
+            } else {
                 jpql += " and";
             }
             jpql += " m.name like :name";
@@ -68,6 +68,15 @@ public class OrderRepository {
         }
         return query.getResultList();
 
+    }
+
+
+    public List<Order> findAllOrdersFetchJoinMemberDelivery(OrderSearch orderSearch) {
+        String query = "select o from Order o" +
+                " join fetch o.member m" +
+                " join fetch o.delivery d";
+        return em.createQuery(query, Order.class).getResultList();
+        //fetch Join은 한 번의 Query로 memberGraph의 객체 값을 불러온다. => inner join.
     }
 
 }

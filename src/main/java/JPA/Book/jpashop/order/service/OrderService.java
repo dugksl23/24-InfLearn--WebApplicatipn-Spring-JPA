@@ -3,6 +3,7 @@ package JPA.Book.jpashop.order.service;
 
 import JPA.Book.jpashop.Member.domain.Member;
 import JPA.Book.jpashop.Member.repository.MemberRepository;
+import JPA.Book.jpashop.api.order.dto.ApiOrderDto;
 import JPA.Book.jpashop.delivery.domain.Delivery;
 import JPA.Book.jpashop.delivery.domain.DeliveryStatus;
 import JPA.Book.jpashop.item.domain.Item;
@@ -85,6 +86,12 @@ public class OrderService {
     public List<Order> findOrders(OrderSearch orderSearch) {
         List<Order> orderList = orderRepository.findAllOrders(orderSearch);
         return orderList;
+    }
+
+    @Transactional(readOnly = true)
+    public List<ApiOrderDto> findAllOrderFetchMemberDeliveryV3(OrderSearch orderSearch){
+        return orderRepository.findAllOrdersFetchJoinMemberDelivery(orderSearch).stream()
+                .map(ApiOrderDto::new).toList();
     }
 }
 
