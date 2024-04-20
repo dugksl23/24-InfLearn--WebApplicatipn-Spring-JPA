@@ -39,7 +39,8 @@ dependencies {
     // Hibernate Validator에서 제공되는 어노테이션 중 하나가 @NotEmpty입니다
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: '2.5.2'
     // https://mvnrepository.com/artifact/com.fasterxml.jackson.datatype/jackson-datatype-hibernate5-jakarta
-    implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-hibernate5-jakarta'
+    implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-hibernate5-jakarta', version: '2.16.0'
+
 }
 
 tasks.named('test') {

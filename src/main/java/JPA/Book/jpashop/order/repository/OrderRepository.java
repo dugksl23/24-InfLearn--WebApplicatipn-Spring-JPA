@@ -31,7 +31,9 @@ public class OrderRepository {
     //주문 상태 검색
     public List<Order> findAllOrders(OrderSearch orderSearch) {
 
-        String jpql = "select o From Order o left join o.member m";
+        String jpql = "select o From Order o";
+//                + " left join o.member m";
+
         boolean isFirstCondition = true;
         // JPQL Join 문 ex)　select o from Order o left join Member m
 

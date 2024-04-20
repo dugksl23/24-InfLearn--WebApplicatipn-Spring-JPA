@@ -87,8 +87,9 @@ public class OrderService {
     }
 
     public List<Order> findOrders(OrderSearch orderSearch) {
-        List<Order> orderList = orderRepository.findAllOrders(orderSearch);
-        return orderList;
+        List<Order> allOrders = orderRepository.findAllOrders(orderSearch);
+
+        return allOrders;
     }
 
     public List<ApiOrderDto> findAllOrderFetchMemberDeliveryV3(OrderSearch orderSearch){

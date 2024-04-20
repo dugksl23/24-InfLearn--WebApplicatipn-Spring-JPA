@@ -5,7 +5,6 @@ import JPA.Book.jpashop.Member.domain.Member;
 import JPA.Book.jpashop.delivery.domain.Delivery;
 import JPA.Book.jpashop.delivery.domain.DeliveryStatus;
 import JPA.Book.jpashop.orderItem.domain.OrderItem;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -47,7 +46,6 @@ public class Order {
     @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<OrderItem> orderItems;
 
-    @JsonIgnore
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "delivery_id")
     //하나의 주문은 하나의 배송정보를 갖기에 둘다 1:1 관계이다.
