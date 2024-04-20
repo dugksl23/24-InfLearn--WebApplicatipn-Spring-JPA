@@ -4,6 +4,8 @@ package JPA.Book.jpashop.order.service;
 import JPA.Book.jpashop.Member.domain.Member;
 import JPA.Book.jpashop.Member.repository.MemberRepository;
 import JPA.Book.jpashop.api.order.dto.ApiOrderDto;
+import JPA.Book.jpashop.api.order.dto.ApiOrderQueryDto;
+import JPA.Book.jpashop.api.order.repository.OrderQueryRepository;
 import JPA.Book.jpashop.delivery.domain.Delivery;
 import JPA.Book.jpashop.delivery.domain.DeliveryStatus;
 import JPA.Book.jpashop.item.domain.Item;
@@ -30,6 +32,7 @@ public class OrderService {
     private final EntityManager em;
     private final MemberRepository memberRepository;
     private final ItemRepository itemRepository;
+    private final OrderQueryRepository orderQueryRepository;
 
 
     //주문
@@ -88,10 +91,18 @@ public class OrderService {
         return orderList;
     }
 
-    @Transactional(readOnly = true)
     public List<ApiOrderDto> findAllOrderFetchMemberDeliveryV3(OrderSearch orderSearch){
         return orderRepository.findAllOrdersFetchJoinMemberDelivery(orderSearch).stream()
                 .map(ApiOrderDto::new).toList();
     }
+
+    /**
+     * 1. orderQueryRepository　용 메서드이자, 성능 최적화를 위한 것
+     * 2. Entity Repository 와 Query Repository 역할을 분리.
+     */
+    public List<ApiOrderQueryDto> findAllOrderDtoV4(OrderSearch orderSearch){
+        return orderQueryRepository.findAllOrderDto(orderSearch);
+    }
+
 }
 

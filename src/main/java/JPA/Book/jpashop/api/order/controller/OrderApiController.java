@@ -1,7 +1,8 @@
-package JPA.Book.jpashop.api.order;
+package JPA.Book.jpashop.api.order.controller;
 
 
 import JPA.Book.jpashop.api.order.dto.ApiOrderDto;
+import JPA.Book.jpashop.api.order.dto.ApiOrderQueryDto;
 import JPA.Book.jpashop.api.order.dto.ApiOrderResultResponse;
 import JPA.Book.jpashop.api.order.dto.ApiSimpleOrderDto;
 import JPA.Book.jpashop.order.domain.Order;
@@ -57,5 +58,13 @@ public class OrderApiController {
         List<ApiOrderDto> list = orderService.findAllOrderFetchMemberDeliveryV3(orderSearch);
         return new ApiOrderResultResponse<>(list.size(), list);
     }
+
+    @GetMapping("/v4/orderList")
+    public ApiOrderResultResponse findAllOrderDtoV4() {
+        OrderSearch orderSearch = new OrderSearch();
+        List<ApiOrderQueryDto> list = orderService.findAllOrderDtoV4(orderSearch);
+        return new ApiOrderResultResponse<>(list.size(), list);
+    }
+
 
 }

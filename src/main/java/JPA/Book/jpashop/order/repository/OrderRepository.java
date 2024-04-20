@@ -70,7 +70,6 @@ public class OrderRepository {
 
     }
 
-
     public List<Order> findAllOrdersFetchJoinMemberDelivery(OrderSearch orderSearch) {
         String query = "select o from Order o" +
                 " join fetch o.member m" +
@@ -78,5 +77,6 @@ public class OrderRepository {
         return em.createQuery(query, Order.class).getResultList();
         //fetch Join은 한 번의 Query로 memberGraph의 객체 값을 불러온다. => inner join.
     }
+
 
 }
