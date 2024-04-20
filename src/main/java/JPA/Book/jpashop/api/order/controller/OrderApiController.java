@@ -7,7 +7,6 @@ import JPA.Book.jpashop.order.domain.OrderSearch;
 import JPA.Book.jpashop.order.service.OrderService;
 import JPA.Book.jpashop.orderItem.domain.OrderItem;
 import lombok.RequiredArgsConstructor;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -39,12 +38,18 @@ public class OrderApiController {
 
 
     @RequestMapping("/v2/orderList")
-    @Transactional
     public ApiOrderResultResponse findOrderListV2(OrderSearch orderSearch) {
-        List<ApiOrderDto> list = orderService.findOrders(orderSearch).stream()
-                .map(ApiOrderDto::new).toList();
+        List<ApiOrderDto> list = orderService.findOrders(orderSearch).stream().map(ApiOrderDto::new).toList();
         int size = list.size();
-        return new ApiOrderResultResponse(size, list);
+        return new ApiOrderResultResponse<>(size, list);
 
     }
+
+    @RequestMapping("/v3/orderList") // Fetch Join을 통한 성능 최적화
+    public ApiOrderResultResponse findOrderListV3(OrderSearch orderSearch) {
+        List<ApiOrderDto> list = orderService.findAllOrderWithItem(orderSearch);
+        return new ApiOrderResultResponse<>(list.size(), list);
+    }
+
+
 }

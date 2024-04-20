@@ -22,7 +22,7 @@ public class ApiOrderDto {
     private Address address;
 
     private OrderStatus orderStatus;
-    private List<OrderItemDto> orderItem = new ArrayList<>();
+    private List<OrderItemDto> orderItems = new ArrayList<>();
 
     public ApiOrderDto(Order order) {
         id = order.getId();
@@ -30,6 +30,6 @@ public class ApiOrderDto {
         memberName = order.getMember().getName();
         address = order.getDelivery().getDeliveryAddress();
         orderStatus = order.getOrderStatus();
-        orderItem = order.getOrderItems().stream().map(OrderItemDto::new).toList();
+        orderItems = order.getOrderItems().stream().map(OrderItemDto::new).toList();
     }
 }

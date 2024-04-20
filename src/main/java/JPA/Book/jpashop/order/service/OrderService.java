@@ -16,6 +16,7 @@ import JPA.Book.jpashop.order.repository.OrderRepository;
 import JPA.Book.jpashop.orderItem.domain.OrderItem;
 import jakarta.persistence.EntityManager;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +27,7 @@ import java.util.Map;
 @Service
 @Transactional(readOnly = true)
 @AllArgsConstructor
+@Slf4j
 public class OrderService {
 
     private final OrderRepository orderRepository;
@@ -92,7 +94,7 @@ public class OrderService {
         return allOrders;
     }
 
-    public List<ApiOrderDto> findAllOrderFetchMemberDeliveryV3(OrderSearch orderSearch){
+    public List<ApiOrderDto> findAllOrderFetchMemberDeliveryV3(OrderSearch orderSearch) {
         return orderRepository.findAllOrdersFetchJoinMemberDelivery(orderSearch).stream()
                 .map(ApiOrderDto::new).toList();
     }
@@ -101,9 +103,25 @@ public class OrderService {
      * 1. orderQueryRepository　용 메서드이자, 성능 최적화를 위한 것
      * 2. Entity Repository 와 Query Repository 역할을 분리.
      */
-    public List<ApiOrderQueryDto> findAllOrderDtoV4(OrderSearch orderSearch){
+    public List<ApiOrderQueryDto> findAllOrderDtoV4(OrderSearch orderSearch) {
         return orderQueryRepository.findAllOrderDto(orderSearch);
     }
 
+
+    /**
+     * @xToMany 일 경우에는, distinct 키워드를 통해 중복 제거 필수.
+     */
+    public List<ApiOrderDto> findAllOrderWithItem(OrderSearch orderSearch) {
+        List<ApiOrderDto> list = orderRepository.findAllOrderWithItem(orderSearch).stream()
+                .map(ApiOrderDto::new).toList();
+//        log.info("size : {}", list.size());
+//        for (ApiOrderDto order : list) {
+//            log.info("주소값 ref : {}, order Id : {}", order, order.getId());
+//            log.info("item count : {}", order.getOrderItems().size());
+//            order.getOrderItems().forEach(i ->
+//                    log.info("item name : {}", i.getItem().getName()));
+//        }
+        return list;
+    }
 }
 
