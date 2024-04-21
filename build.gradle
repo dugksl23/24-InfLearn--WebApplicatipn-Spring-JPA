@@ -32,7 +32,7 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 //    implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter'
-    implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter'
+    implementation group: 'com.github.gavlyukovskiy', name: 'p6spy-spring-boot-starter', version: '1.9.1'
 
     //Hibernate Validator:
     // Hibernate Validator는 Java Bean 유효성 검사(JSR 380)를 위한 구현체 중 하나입니다.

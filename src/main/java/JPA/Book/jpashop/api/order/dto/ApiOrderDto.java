@@ -30,6 +30,7 @@ public class ApiOrderDto {
         memberName = order.getMember().getName();
         address = order.getDelivery().getDeliveryAddress();
         orderStatus = order.getOrderStatus();
+        // 프록시 강제 초기화 루프
         orderItems = order.getOrderItems().stream().map(OrderItemDto::new).toList();
     }
 }

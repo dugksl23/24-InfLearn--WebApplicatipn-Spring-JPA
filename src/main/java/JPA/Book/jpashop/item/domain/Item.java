@@ -4,10 +4,13 @@ import JPA.Book.jpashop.category.domain.Category;
 import JPA.Book.jpashop.exception.NotEnoughStockQuantityException;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.BatchSize;
 
 import java.util.ArrayList;
 import java.util.List;
 
+
+@BatchSize(size = 100)
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

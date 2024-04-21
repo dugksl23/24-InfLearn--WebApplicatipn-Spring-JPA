@@ -7,7 +7,9 @@ import JPA.Book.jpashop.order.domain.OrderSearch;
 import JPA.Book.jpashop.order.service.OrderService;
 import JPA.Book.jpashop.orderItem.domain.OrderItem;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -15,6 +17,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/order/")
 @RequiredArgsConstructor
+@Slf4j
 public class OrderApiController {
 
     private final OrderService orderService;
@@ -39,7 +42,8 @@ public class OrderApiController {
 
     @RequestMapping("/v2/orderList")
     public ApiOrderResultResponse findOrderListV2(OrderSearch orderSearch) {
-        List<ApiOrderDto> list = orderService.findOrders(orderSearch).stream().map(ApiOrderDto::new).toList();
+        List<ApiOrderDto> list = orderService.findOrders(orderSearch).stream()
+                .map(ApiOrderDto::new).toList();
         int size = list.size();
         return new ApiOrderResultResponse<>(size, list);
 
@@ -49,6 +53,21 @@ public class OrderApiController {
     public ApiOrderResultResponse findOrderListV3(OrderSearch orderSearch) {
         List<ApiOrderDto> list = orderService.findAllOrderWithItem(orderSearch);
         return new ApiOrderResultResponse<>(list.size(), list);
+    }
+
+
+    /**
+     * xToOne 관계에 있는 연관관계 Entity들을 Fetch Join으로 즉시 로딩.
+     * -> xToOne 관계는 페이징에 영향을 주지 않는다.
+     */
+    @RequestMapping("/v3/orderList/page") // Fetch Join을 통한 성능 최적화
+    public ApiOrderResultResponse findOrderListWithPagingV3(
+            @RequestParam(value = "offset", defaultValue = "0") int offset,
+            @RequestParam(value = "limit", defaultValue = "100")  int limit) {
+        List<ApiOrderDto> allOrderFetchMemberDeliveryV3 =
+                orderService.findAllOrderFetchMDWithPaging(offset, limit);
+        int size = allOrderFetchMemberDeliveryV3.size();
+        return new ApiOrderResultResponse(size, allOrderFetchMemberDeliveryV3);
     }
 
 

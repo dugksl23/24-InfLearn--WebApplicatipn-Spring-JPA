@@ -114,14 +114,24 @@ public class OrderService {
     public List<ApiOrderDto> findAllOrderWithItem(OrderSearch orderSearch) {
         List<ApiOrderDto> list = orderRepository.findAllOrderWithItem(orderSearch).stream()
                 .map(ApiOrderDto::new).toList();
-//        log.info("size : {}", list.size());
-//        for (ApiOrderDto order : list) {
-//            log.info("주소값 ref : {}, order Id : {}", order, order.getId());
-//            log.info("item count : {}", order.getOrderItems().size());
-//            order.getOrderItems().forEach(i ->
-//                    log.info("item name : {}", i.getItem().getName()));
-//        }
+        log.info("size : {}", list.size());
+        for (ApiOrderDto order : list) {
+            log.info("주소값 ref : {}, order Id : {}", order, order.getId());
+            log.info("item count : {}", order.getOrderItems().size());
+            order.getOrderItems().forEach(i ->
+                    log.info("item name : {}", i.getItem().getName()));
+        }
         return list;
+    }
+
+    public List<ApiOrderDto> findAllOrderFetchMDWithPaging(int offset, int limit) {
+        return em.createQuery("select o from Order o" +
+                        " join fetch o.member m" +
+                        " join fetch o.delivery d", Order.class)
+                .setFirstResult(offset)
+                .setMaxResults(limit)
+                .getResultList()
+                .stream().map(ApiOrderDto::new).toList();
     }
 }
 

@@ -83,10 +83,11 @@ public class OrderRepository {
 
     public List<Order> findAllOrderWithItem(OrderSearch orderSearch) {
         return em.createQuery("select distinct o from Order o " +
-                " join fetch o.member m" +
-                " join fetch o.delivery d" +
-                " join fetch o.orderItems oi" +
-                " join fetch oi.item i", Order.class).getResultList();
+                        " join fetch o.member m" +
+                        " join fetch o.delivery d" +
+                        " join fetch o.orderItems oi" +
+                        " join fetch oi.item i", Order.class)
+                .getResultList();
         // JPA Distinct : 중복이 되는 식별자를 대상으로 중복을 없애는 명령어이며, DB에서는 중복이 되는 record는 없애는 db 명령어도 한다.
         // 결과는? distinct　와 무관하게 collection 에는 order는 size가 2개이다.
     }

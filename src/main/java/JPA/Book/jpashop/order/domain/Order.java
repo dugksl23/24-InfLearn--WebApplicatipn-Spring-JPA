@@ -7,6 +7,7 @@ import JPA.Book.jpashop.delivery.domain.DeliveryStatus;
 import JPA.Book.jpashop.orderItem.domain.OrderItem;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -43,6 +44,7 @@ public class Order {
     //관계의 주인을 지정하는 컬럼이다.
     private Member member;
 
+    @BatchSize(size = 100)
     @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<OrderItem> orderItems;
 
