@@ -36,21 +36,24 @@ public class OrderQueryRepository {
 
     }
 
-    // 1. orderList를 1:1 관계인 member와 delivery를 별도로 뽑고, -> 2개의 오더가 존재
-    // 2. orderItem 은 다:1 이기에 n+1 걱정없이 조회 가능하다.
-    //    따라서 별도 조회 메서드를 통해 별도 반환받아서 set한다. -> 각각의 주문별로 2개의 아이템을 주문
-    // 3. item 은 orderItem을 조회할 때 join을 걸어서 가져온다.
     public List<OrderQueryDto> findOrderQueryDtoList() {
 
+        // 1. orderList를 1:1 관계인 member와 delivery를 별도로 뽑고, -> 2개의 오더가 존재
         List<OrderQueryDto> allOrderQueryDto = findAllOrderQueryDto();
+
+        // 2. orderItem 은 다:1 이기에 n+1 걱정없이 조회 가능하다.
+        //    따라서 별도 조회 메서드를 통해 별도 반환받아서 set한다. -> 각각의 주문별로 2개의 아이템을 주문
+        // 3. item 은 orderItem을 조회할 때 join을 걸어서 가져온다.
+        //  * join은 레이지 로딩일 경우에는 query를 추가적으로 더 날리고, fech join과 in query라면 한번에 같이 불러온다.
         allOrderQueryDto.forEach(o ->
         {
             List<OrderItemQueryDto> allOrderItems = findAllOrderItemDtoList(o.getOrderId());
             o.setOrderItems(allOrderItems);
-            // 1:N이기에, 각각의 order 당 orderItem에 대해서 list로 set 한다.
-            // 2. 모든 order에 대한 조회이기에 order 또한 list로 반환.
+            // 3-1:N이기에, 각각의 order 당 orderItem에 대해서 list로 set 한다.
+            // 3-2. 모든 order에 대한 조회이기에 order 또한 list로 반환.
         });
 
+        // --> 총 3번의 query가 발생한다.
         return allOrderQueryDto;
 
     }
@@ -73,6 +76,11 @@ public class OrderQueryRepository {
                         " where oi.order.id = :orderId", OrderItemQueryDto.class)
                 .setParameter("orderId", orderId)
                 .getResultList();
+    }
+
+
+    public List<Order> findAllOrder() {
+        return em.createQuery("select o from Order o", Order.class).getResultList();
     }
 
 }

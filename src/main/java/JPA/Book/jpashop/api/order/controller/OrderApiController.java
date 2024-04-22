@@ -80,4 +80,13 @@ public class OrderApiController {
         return new ApiOrderResultResponse(size, allOrderDto);
     }
 
+    @GetMapping("/v5/orderList")
+    public ApiOrderResultResponse findOrderListV5(){
+        List<OrderQueryDto> allOrderDto = orderService.findAllByDto_optimization();
+        int size = allOrderDto.size();
+        return new ApiOrderResultResponse(size, allOrderDto);
+    }
+
+
+
 }

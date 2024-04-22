@@ -15,15 +15,18 @@ import JPA.Book.jpashop.order.domain.OrderSearch;
 import JPA.Book.jpashop.order.query.OrderQueryDto;
 import JPA.Book.jpashop.order.repository.OrderRepository;
 import JPA.Book.jpashop.orderItem.domain.OrderItem;
+import JPA.Book.jpashop.orderItem.query.OrderItemQueryDto;
 import jakarta.persistence.EntityManager;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -136,9 +139,45 @@ public class OrderService {
     }
 
 
-
     public List<OrderQueryDto> findAllOrderQueryDtoV4() {
         return orderQueryRepository.findOrderQueryDtoList();
+    }
+
+    public List<OrderQueryDto> findAllByDto_optimization() {
+        //0. fetch Join으로 member와 delivery를 조인하여 dto로 변환후 return.
+        List<OrderQueryDto> orderQueryDtoList = orderQueryRepository.findAllOrderQueryDto();
+
+        //1. order를 다 가지고 오고 id만 따로 뽑은 list를 만든다.
+        List<Long> orderIdList = getOrderIdList();
+
+        // 2. orderIdList　를 In query 로 item　을 한번에 전부 가져온다.
+        List<OrderItemQueryDto> orderItemDtoList = getOrderItemDtoList(orderIdList);
+
+        // 3. stream의 Collector의 groupby를 기준으로 orderId를 기준으로 정렬하여 map으로 변환.
+        Map<Long, List<OrderItemQueryDto>> orderItemMap = getOrderItemMap(orderItemDtoList);
+
+        // 4.  메모리 Map에서, orderQueryDto List에 orderId와 맞는 orderItem을 셋팅한다.
+        orderQueryDtoList.forEach(o -> o.setOrderItems(orderItemMap.get(o.getOrderId())));
+        // -> query가 총 2번 나간다.
+        return null;
+    }
+
+    private static Map<Long, List<OrderItemQueryDto>> getOrderItemMap(List<OrderItemQueryDto> orderItemDtoList) {
+        return orderItemDtoList.stream()
+                .collect(Collectors.groupingBy(OrderItemQueryDto::getOrderId));
+    }
+
+    private List<OrderItemQueryDto> getOrderItemDtoList(List<Long> orderIdList) {
+        return em.createQuery("select new JPA.Book.jpashop.orderItem.query.OrderItemQueryDto(oi.order.id, i.name, oi.price, oi.count) from OrderItem oi" +
+                        " join oi.item i" +
+                        " where oi.order.id in :orderIds", OrderItemQueryDto.class)
+                .setParameter("orderIds", orderIdList)
+                .getResultList();
+    }
+
+    private List<Long> getOrderIdList() {
+        return orderQueryRepository.findAllOrder().stream()
+                .map(o -> o.getId()).toList();
     }
 }
 
