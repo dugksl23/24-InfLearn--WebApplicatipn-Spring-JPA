@@ -1,5 +1,6 @@
 package JPA.Book.jpashop.api.order.repository;
 
+import JPA.Book.jpashop.api.order.dto.ApiOrderDto;
 import JPA.Book.jpashop.api.order.dto.ApiOrderQueryDto;
 import JPA.Book.jpashop.order.domain.Order;
 import JPA.Book.jpashop.order.domain.OrderSearch;
@@ -10,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -66,6 +66,7 @@ public class OrderQueryRepository {
                 // 임베디드값 타임은 컬렉션이 아니기에 가능하지만, orderItems는 collection이기에 불가능.
                 " join o.member m" +
                 " join o.delivery d", OrderQueryDto.class).getResultList();
+        // new 키워드를 통한 fetch join 시에는 불가능
     }
 
 
@@ -83,4 +84,11 @@ public class OrderQueryRepository {
         return em.createQuery("select o from Order o", Order.class).getResultList();
     }
 
+    public List<OrderItemQueryDto> getOrderItemDtoList(List<Long> orderIdList) {
+        return em.createQuery("select new JPA.Book.jpashop.orderItem.query.OrderItemQueryDto(oi.order.id, i.name, oi.price, oi.count) from OrderItem oi" +
+                        " join oi.item i" +
+                        " where oi.order.id in :orderIds", OrderItemQueryDto.class)
+                .setParameter("orderIds", orderIdList)
+                .getResultList();
+    }
 }

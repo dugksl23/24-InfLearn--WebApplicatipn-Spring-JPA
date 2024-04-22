@@ -35,7 +35,6 @@ import java.util.stream.Collectors;
 public class OrderService {
 
     private final OrderRepository orderRepository;
-    private final EntityManager em;
     private final MemberRepository memberRepository;
     private final ItemRepository itemRepository;
     private final OrderQueryRepository orderQueryRepository;
@@ -83,14 +82,6 @@ public class OrderService {
         return null;
     }
 
-    //주문 전체 조회
-    public List<Order> findAll() {
-        return em.createQuery("select o from Order o", Order.class).getResultList();
-    }
-
-    public Order findOne(Long orderId) {
-        return em.find(Order.class, orderId);
-    }
 
     public List<Order> findOrders(OrderSearch orderSearch) {
         List<Order> allOrders = orderRepository.findAllOrders(orderSearch);
@@ -104,38 +95,32 @@ public class OrderService {
     }
 
     /**
-     * 1. orderQueryRepository　용 메서드이자, 성능 최적화를 위한 것
-     * 2. Entity Repository 와 Query Repository 역할을 분리.
-     */
-    public List<ApiOrderQueryDto> findAllOrderDtoV4(OrderSearch orderSearch) {
-        return orderQueryRepository.findAllOrderDto(orderSearch);
-    }
-
-
-    /**
      * @xToMany 일 경우에는, distinct 키워드를 통해 중복 제거 필수.
      */
     public List<ApiOrderDto> findAllOrderWithItem(OrderSearch orderSearch) {
         List<ApiOrderDto> list = orderRepository.findAllOrderWithItem(orderSearch).stream()
                 .map(ApiOrderDto::new).toList();
-        log.info("size : {}", list.size());
-        for (ApiOrderDto order : list) {
-            log.info("주소값 ref : {}, order Id : {}", order, order.getId());
-            log.info("item count : {}", order.getOrderItems().size());
-            order.getOrderItems().forEach(i ->
-                    log.info("item name : {}", i.getItem().getName()));
-        }
+//        log.info("size : {}", list.size());
+//        for (ApiOrderDto order : list) {
+//            log.info("주소값 ref : {}, order Id : {}", order, order.getId());
+//            log.info("item count : {}", order.getOrderItems().size());
+//            order.getOrderItems().forEach(i ->
+//                    log.info("item name : {}", i.getItem().getName()));
+//        }
         return list;
     }
 
     public List<ApiOrderDto> findAllOrderFetchMDWithPaging(int offset, int limit) {
-        return em.createQuery("select o from Order o" +
-                        " join fetch o.member m" +
-                        " join fetch o.delivery d", Order.class)
-                .setFirstResult(offset)
-                .setMaxResults(limit)
-                .getResultList()
-                .stream().map(ApiOrderDto::new).toList();
+        return orderRepository.findAllOrderFetchMDWithPaging(offset, limit);
+    }
+
+
+    /**
+     * 1. orderQueryRepository　용 메서드이자, 성능 최적화를 위한 것
+     * 2. Entity Repository 와 Query Repository 역할을 분리.
+     */
+    public List<ApiOrderQueryDto> findAllOrderDtoV4(OrderSearch orderSearch) {
+        return orderQueryRepository.findAllOrderDto(orderSearch);
     }
 
 
@@ -146,20 +131,18 @@ public class OrderService {
     public List<OrderQueryDto> findAllByDto_optimization() {
         //0. fetch Join으로 member와 delivery를 조인하여 dto로 변환후 return.
         List<OrderQueryDto> orderQueryDtoList = orderQueryRepository.findAllOrderQueryDto();
-
         //1. order를 다 가지고 오고 id만 따로 뽑은 list를 만든다.
         List<Long> orderIdList = getOrderIdList();
 
         // 2. orderIdList　를 In query 로 item　을 한번에 전부 가져온다.
         List<OrderItemQueryDto> orderItemDtoList = getOrderItemDtoList(orderIdList);
-
         // 3. stream의 Collector의 groupby를 기준으로 orderId를 기준으로 정렬하여 map으로 변환.
         Map<Long, List<OrderItemQueryDto>> orderItemMap = getOrderItemMap(orderItemDtoList);
 
         // 4.  메모리 Map에서, orderQueryDto List에 orderId와 맞는 orderItem을 셋팅한다.
         orderQueryDtoList.forEach(o -> o.setOrderItems(orderItemMap.get(o.getOrderId())));
         // -> query가 총 2번 나간다.
-        return null;
+        return orderQueryDtoList;
     }
 
     private static Map<Long, List<OrderItemQueryDto>> getOrderItemMap(List<OrderItemQueryDto> orderItemDtoList) {
@@ -168,16 +151,13 @@ public class OrderService {
     }
 
     private List<OrderItemQueryDto> getOrderItemDtoList(List<Long> orderIdList) {
-        return em.createQuery("select new JPA.Book.jpashop.orderItem.query.OrderItemQueryDto(oi.order.id, i.name, oi.price, oi.count) from OrderItem oi" +
-                        " join oi.item i" +
-                        " where oi.order.id in :orderIds", OrderItemQueryDto.class)
-                .setParameter("orderIds", orderIdList)
-                .getResultList();
+        return orderQueryRepository.getOrderItemDtoList(orderIdList);
     }
 
     private List<Long> getOrderIdList() {
         return orderQueryRepository.findAllOrder().stream()
                 .map(o -> o.getId()).toList();
     }
+
 }
 

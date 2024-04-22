@@ -1,5 +1,6 @@
 package JPA.Book.jpashop.order.repository;
 
+import JPA.Book.jpashop.api.order.dto.ApiOrderDto;
 import JPA.Book.jpashop.order.domain.Order;
 import JPA.Book.jpashop.order.domain.OrderSearch;
 import jakarta.persistence.EntityManager;
@@ -91,4 +92,15 @@ public class OrderRepository {
         // JPA Distinct : 중복이 되는 식별자를 대상으로 중복을 없애는 명령어이며, DB에서는 중복이 되는 record는 없애는 db 명령어도 한다.
         // 결과는? distinct　와 무관하게 collection 에는 order는 size가 2개이다.
     }
+
+    public List<ApiOrderDto> findAllOrderFetchMDWithPaging(int offset, int limit){
+        return em.createQuery("select o from Order o" +
+                        " join fetch o.member m" +
+                        " join fetch o.delivery d", Order.class)
+                .setFirstResult(offset)
+                .setMaxResults(limit)
+                .getResultList()
+                .stream().map(ApiOrderDto::new).toList();
+    }
+
 }

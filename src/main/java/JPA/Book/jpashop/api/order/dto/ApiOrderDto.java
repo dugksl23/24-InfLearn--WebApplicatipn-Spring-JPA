@@ -15,7 +15,7 @@ import java.util.List;
 public class ApiOrderDto {
 
     private Long id;
-    private LocalDateTime orderTime;
+    private LocalDateTime orderDate;
 //    private int totalPrice;
 
     private String memberName;
@@ -26,7 +26,7 @@ public class ApiOrderDto {
 
     public ApiOrderDto(Order order) {
         id = order.getId();
-        orderTime = order.getOrderDate();
+        orderDate = order.getOrderDate();
         memberName = order.getMember().getName();
         address = order.getDelivery().getDeliveryAddress();
         orderStatus = order.getOrderStatus();
