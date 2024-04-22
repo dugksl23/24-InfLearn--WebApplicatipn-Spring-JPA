@@ -4,10 +4,12 @@ import JPA.Book.jpashop.api.order.dto.ApiOrderDto;
 import JPA.Book.jpashop.api.order.dto.ApiOrderResultResponse;
 import JPA.Book.jpashop.order.domain.Order;
 import JPA.Book.jpashop.order.domain.OrderSearch;
+import JPA.Book.jpashop.order.query.OrderQueryDto;
 import JPA.Book.jpashop.order.service.OrderService;
 import JPA.Book.jpashop.orderItem.domain.OrderItem;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,6 +23,7 @@ import java.util.List;
 public class OrderApiController {
 
     private final OrderService orderService;
+
 
     // Entity 노출로 인해서 사용을 지양.
     @RequestMapping("v1/orderList")
@@ -70,5 +73,11 @@ public class OrderApiController {
         return new ApiOrderResultResponse(size, allOrderFetchMemberDeliveryV3);
     }
 
+    @GetMapping("/v4/orderList")
+    public ApiOrderResultResponse findOrderListV4(){
+        List<OrderQueryDto> allOrderDto = orderService.findAllOrderQueryDtoV4();
+        int size = allOrderDto.size();
+        return new ApiOrderResultResponse(size, allOrderDto);
+    }
 
 }

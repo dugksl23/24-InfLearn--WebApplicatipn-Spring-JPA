@@ -1,12 +1,16 @@
 package JPA.Book.jpashop.api.order.repository;
 
 import JPA.Book.jpashop.api.order.dto.ApiOrderQueryDto;
+import JPA.Book.jpashop.order.domain.Order;
 import JPA.Book.jpashop.order.domain.OrderSearch;
+import JPA.Book.jpashop.order.query.OrderQueryDto;
+import JPA.Book.jpashop.orderItem.query.OrderItemQueryDto;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -32,6 +36,43 @@ public class OrderQueryRepository {
 
     }
 
+    // 1. orderList를 1:1 관계인 member와 delivery를 별도로 뽑고, -> 2개의 오더가 존재
+    // 2. orderItem 은 다:1 이기에 n+1 걱정없이 조회 가능하다.
+    //    따라서 별도 조회 메서드를 통해 별도 반환받아서 set한다. -> 각각의 주문별로 2개의 아이템을 주문
+    // 3. item 은 orderItem을 조회할 때 join을 걸어서 가져온다.
+    public List<OrderQueryDto> findOrderQueryDtoList() {
 
+        List<OrderQueryDto> allOrderQueryDto = findAllOrderQueryDto();
+        allOrderQueryDto.forEach(o ->
+        {
+            List<OrderItemQueryDto> allOrderItems = findAllOrderItemDtoList(o.getOrderId());
+            o.setOrderItems(allOrderItems);
+            // 1:N이기에, 각각의 order 당 orderItem에 대해서 list로 set 한다.
+            // 2. 모든 order에 대한 조회이기에 order 또한 list로 반환.
+        });
+
+        return allOrderQueryDto;
+
+    }
+
+    public List<OrderQueryDto> findAllOrderQueryDto() {
+        return em.createQuery("select new JPA.Book.jpashop.order.query.OrderQueryDto" +
+                "(o.id, m.name, o.orderDate, o.orderStatus, o.delivery.deliveryAddress) from Order o" +
+                // JPQL의 new 명령어로 dto로 변환하더라도, collection을 바로 넣을 수 없다.
+                // why? SQL처럼 데이터를 flat 하게 한줄밖에 넣는 것이다.
+                // 임베디드값 타임은 컬렉션이 아니기에 가능하지만, orderItems는 collection이기에 불가능.
+                " join o.member m" +
+                " join o.delivery d", OrderQueryDto.class).getResultList();
+    }
+
+
+    // order와 연관이 있는 orderItem 조회
+    private List<OrderItemQueryDto> findAllOrderItemDtoList(Long orderId) {
+        return em.createQuery("select new JPA.Book.jpashop.orderItem.query.OrderItemQueryDto(oi.order.id, i.name, oi.price, oi.count) from OrderItem oi" +
+                        " join oi.item i" +
+                        " where oi.order.id = :orderId", OrderItemQueryDto.class)
+                .setParameter("orderId", orderId)
+                .getResultList();
+    }
 
 }

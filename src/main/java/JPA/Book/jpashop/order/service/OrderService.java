@@ -12,6 +12,7 @@ import JPA.Book.jpashop.item.domain.Item;
 import JPA.Book.jpashop.item.repository.ItemRepository;
 import JPA.Book.jpashop.order.domain.Order;
 import JPA.Book.jpashop.order.domain.OrderSearch;
+import JPA.Book.jpashop.order.query.OrderQueryDto;
 import JPA.Book.jpashop.order.repository.OrderRepository;
 import JPA.Book.jpashop.orderItem.domain.OrderItem;
 import jakarta.persistence.EntityManager;
@@ -132,6 +133,12 @@ public class OrderService {
                 .setMaxResults(limit)
                 .getResultList()
                 .stream().map(ApiOrderDto::new).toList();
+    }
+
+
+
+    public List<OrderQueryDto> findAllOrderQueryDtoV4() {
+        return orderQueryRepository.findOrderQueryDtoList();
     }
 }
 

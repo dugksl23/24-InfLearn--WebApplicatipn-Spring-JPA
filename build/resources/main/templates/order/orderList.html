@@ -1,0 +1,93 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header"/>
+<body>
+<div class="container">
+    <div th:replace="fragments/bodyHeader :: bodyHeader"/>
+    <div>
+        <!--   ========== order Search Div =========- -->
+        <div>
+            <form th:object="${orderSearch}" class="form-inline">
+                <div class="form-group mb-2">
+                    <input type="text" th:field="*{memberName}" class="form- control" placeholder="회원명"/>
+                    <!-- th:filed="" 은 해당 태그의 id 값과 name 값을 설정.-->
+                </div>
+                <div class="form-group mx-sm-1 mb-2">
+                    <select th:field="*{orderStatus}" class="form-control">
+                        <option value="">주문상태</option>
+                        <option th:each="orderStatus : ${T(JPA.Book.jpashop.order.domain.OrderStatus).values()}"
+                                th:value="${orderStatus}"
+                                th:text="${orderStatus}">option
+                        </option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary mb-2">검색</button>
+            </form>
+        </div>
+        <!-- ========== order Search Div =========-->
+
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>회원명</th>
+                <th>대표상품 이름</th>
+                <th>대표상품 주문가격</th>
+                <th>대표상품 주문수량</th>
+                <th>상태</th>
+                <th>일시</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="order : ${orderList}">
+                <td th:text="${order.id}"></td>
+                <td th:text="${order.member.name}"></td>
+                <!-- order.orderItems에 저장된 모든 주문 항목을 반복 -->
+                <td>
+                    <span th:each="orderItem : ${order.orderItems}">
+                    <span th:text="${orderItem.item.name}"></span>
+                </span>
+                </td>
+
+                <td>
+                    <span th:each="orderItem : ${order.orderItems}">
+                    <span th:text="${orderItem.item.price}"></span>
+                </span>
+                </td>
+                <td>
+                    <span th:each="orderItem : ${order.orderItems}">
+                    <span th:text="${orderItem.item.stockQuantity}"></span>
+                </span>
+                </td>
+
+                <!--                <td th:text="${order.orderItems[0].item.name}"></td>-->
+                <!--                <td th:text="${order.orderItems[0].price}"></td>-->
+                <!--                <td th:text="${order.orderItems[0].count}"></td>-->
+                <!-- order.orderItems에 저장된 모든 주문 항목을 반복 -->
+                <td th:text="${order.orderStatus}"></td>
+                <td th:text="${order.orderDate}"></td>
+                <td>
+                    <a th:if="${order.orderStatus.name() == 'ORDER'}" href="#"
+                       th:href="'javascript:cancel('+${order.id}+')'"
+                       class="btn btn-danger">CANCEL</a>
+                    <!-- get 방식으로 order.id를 전달하며, orderStatus가 order일 경우에 나오도록 하였다.-->
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div th:replace="fragments/footer :: footer"/>
+</div> <!-- /container -->
+</body>
+<script>
+    function cancel(id) {
+        var form = document.createElement("form");
+        form.setAttribute("method", "post");
+        form.setAttribute("action", "/order/cancel/" + id);
+        document.body.appendChild(form);
+        form.submit();
+    }
+
+</script>
+</html>
