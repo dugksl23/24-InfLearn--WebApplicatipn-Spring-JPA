@@ -1,8 +1,13 @@
 package JPA.Book.jpashop.order.repository;
 
+import JPA.Book.jpashop.Member.domain.QMember;
 import JPA.Book.jpashop.api.order.dto.ApiOrderDto;
 import JPA.Book.jpashop.order.domain.Order;
 import JPA.Book.jpashop.order.domain.OrderSearch;
+import JPA.Book.jpashop.order.domain.OrderStatus;
+import JPA.Book.jpashop.order.domain.QOrder;
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import lombok.RequiredArgsConstructor;
@@ -13,11 +18,16 @@ import org.springframework.util.StringUtils;
 import java.util.List;
 
 @Repository
-@RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class OrderRepository {
 
     private final EntityManager em;
+    private final JPAQueryFactory query;
+
+    public OrderRepository(EntityManager em) {
+        this.em = em;
+        this.query = new JPAQueryFactory(em);
+    }
 
     public Long saveOrder(Order order) {
         em.persist(order);
@@ -93,7 +103,7 @@ public class OrderRepository {
         // 결과는? distinct　와 무관하게 collection 에는 order는 size가 2개이다.
     }
 
-    public List<ApiOrderDto> findAllOrderFetchMDWithPaging(int offset, int limit){
+    public List<ApiOrderDto> findAllOrderFetchMDWithPaging(int offset, int limit) {
         return em.createQuery("select o from Order o" +
                         " join fetch o.member m" +
                         " join fetch o.delivery d", Order.class)
@@ -101,6 +111,38 @@ public class OrderRepository {
                 .setMaxResults(limit)
                 .getResultList()
                 .stream().map(ApiOrderDto::new).toList();
+    }
+
+
+    public List<Order> findAll(OrderSearch orderSear) {
+
+        QOrder order = QOrder.order;
+        QMember member = QMember.member;
+
+        return query.select(order)
+                .from(order)
+                .join(order.member, member)//여기서의 member는 QMember의 member를 alias로 지정하겠다는 것.
+                .where(statusEq(orderSear.getOrderStatus()), memberNameLike(orderSear.getMemberName()))
+                        // if 문을 통한 동적 query를 위해서 statusEq()함수를 활용.
+                        .limit(1000)
+                        .fetch();
+    }
+
+    // queryDSL type을 import
+    private BooleanExpression statusEq(OrderStatus statusCondition) {
+        if (statusCondition == null) {
+            return null;
+        }
+        return QOrder.order.orderStatus.eq(statusCondition);
+    }
+
+    // queryDSL type을 import
+    private BooleanExpression memberNameLike(String memberName) {
+        if (!StringUtils.hasText(memberName)) {
+            return null;
+        }
+
+        return QMember.member.name.like(memberName);
     }
 
 }

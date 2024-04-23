@@ -81,6 +81,7 @@ spring:
         format_sql: true
         default_batch_fetch_size: 100 #최적화 옵션 // 글로벌 로딩 전략
         # 100 개 단위로 끊어서 가지고 오겠다는 뜻.
+#    open-in-view: false
 
 logging.level:
   org.hibernate.SQL: debug

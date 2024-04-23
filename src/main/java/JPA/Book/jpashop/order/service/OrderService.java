@@ -16,6 +16,7 @@ import JPA.Book.jpashop.order.query.OrderQueryDto;
 import JPA.Book.jpashop.order.repository.OrderRepository;
 import JPA.Book.jpashop.orderItem.domain.OrderItem;
 import JPA.Book.jpashop.orderItem.query.OrderItemQueryDto;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,7 +39,6 @@ public class OrderService {
     private final MemberRepository memberRepository;
     private final ItemRepository itemRepository;
     private final OrderQueryRepository orderQueryRepository;
-
 
     //주문
     @Transactional
@@ -76,16 +76,9 @@ public class OrderService {
     }
 
 
-    //주문 조회
-    public Order searchOrder(String keyward) {
-        //em.find();
-        return null;
-    }
-
-
     public List<Order> findOrders(OrderSearch orderSearch) {
-        List<Order> allOrders = orderRepository.findAllOrders(orderSearch);
-
+//        List<Order> allOrders = orderRepository.findAllOrders(orderSearch);
+        List<Order> allOrders  = orderRepository.findAll(orderSearch);
         return allOrders;
     }
 
@@ -159,5 +152,5 @@ public class OrderService {
                 .map(o -> o.getId()).toList();
     }
 
-}
 
+}

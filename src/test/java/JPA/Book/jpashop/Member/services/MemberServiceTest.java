@@ -43,7 +43,7 @@ class MemberServiceTest {
                 .build()
                 .toEntity();
         //when
-        memberService.validateDuplicateMember(yohan);
+        memberService.validateDuplicateMember(yohan.getName());
         Long signup = memberService.signup(yohan);
 
         //then
@@ -60,7 +60,7 @@ class MemberServiceTest {
 
         //when
         try{
-            memberService.validateDuplicateMember(yohan);
+            memberService.validateDuplicateMember(yohan.getName());
         } catch(IllegalStateException e){
             e.printStackTrace();
             //System.out.println("error msg :" + e.getStackTrace());

@@ -4,6 +4,7 @@ package JPA.Book.jpashop.Member.controller;
 import JPA.Book.jpashop.Member.domain.Member;
 import JPA.Book.jpashop.Member.dto.MemberDto;
 import JPA.Book.jpashop.Member.dto.MemberResponseDto;
+import JPA.Book.jpashop.Member.services.MemberJpaService;
 import JPA.Book.jpashop.Member.services.MemberService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,7 @@ import java.util.List;
 public class MemberController {
 
     private final MemberService memberService;
+    private final MemberJpaService memberJpaService;
 
     @GetMapping(value = "/signup")
     public String signup(Model model, MemberDto memberDto) {
